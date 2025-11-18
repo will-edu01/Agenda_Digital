@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(label="E-mail")
-    password = forms.CharField(widget=forms.PasswordInput, label="Senha")
+    email = forms.EmailField(label="E-mail", widget=forms.EmailInput(attrs={"placeholder": "E-mail", "class": "input-field"}))
+    password = forms.CharField(label="Senha", widget=forms.PasswordInput(attrs={"placeholder": "Senha", "class": "input-field"}))
     remember_me = forms.BooleanField(required=False, label="Lembrar-me")
 
 

@@ -1,57 +1,52 @@
-{% extends "core/base.html" %}
 {% load static %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>Login</title>
+</head>
+<body>
 
-<div class="form-container">
+<div class="login-container">
 
-    <h2 class="title">Entrar</h2>
+    <!-- LADO ESQUERDO (IMAGEM COM BLUR) -->
+    <div class="login-image"></div>
 
-    <form method="POST" class="form-box">
-        {% csrf_token %}
+    <!-- LADO DIREITO (FORMULÁRIO) -->
+    <div class="login-form-wrapper">
 
-        <div class="form-group">
-            <label>E-mail</label>
-            {{ form.email }}
-        </div>
+        <h2 class="login-title">Login</h2>
 
-        <div class="form-group">
-            <label>Senha</label>
-            {{ form.password }}
-        </div>
+        <form method="POST">
+            {% csrf_token %}
 
-        <div class="form-group checkbox-group">
-            <label>
+            <div class="input-group">
+                {{ form.email }}
+            </div>
+
+            <div class="input-group">
+                {{ form.password }}
+            </div>
+
+            <label class="remember-me">
                 <input type="checkbox" name="remember_me">
                 Lembrar-me
             </label>
+
+            <button type="submit" class="login-button">ENTRAR</button>
+
+        </form>
+
+        <div class="login-links">
+            <p>Esqueci minha senha: <a href="#">Clique Aqui</a></p>
+            <p>Cadastrar-se: <a href="{% url 'register' %}">Clique Aqui</a></p>
         </div>
-
-        {% if form.errors %}
-        <div class="error-box">
-            <ul>
-                {% for field in form %}
-                    {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                    {% endfor %}
-                {% endfor %}
-
-                {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-        <button type="submit" class="btn-submit">Entrar</button>
-
-        <p class="login-link">
-            Não possui conta?
-            <a href="{% url 'register' %}">Criar conta</a>
-        </p>
-
-    </form>
+    </div>
 
 </div>
 
-{% endblock %}
+</body>
+</html>

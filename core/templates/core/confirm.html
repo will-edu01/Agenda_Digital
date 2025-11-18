@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="schedule-container">
+
+    <h2>Confirme seu agendamento</h2>
+
+    <h3>Serviços escolhidos:</h3>
+    <ul>
+        {% for s in services %}
+            <li>{{ s.name }} — R$ {{ s.price }} — {{ s.duration_minutes }} min</li>
+        {% endfor %}
+    </ul>
+
+    <p><strong>Tempo total:</strong> {{ total_minutes }} minutos</p>
+    <p><strong>Preço total:</strong> R$ {{ total_price }}</p>
+
+    <hr>
+
+    <p><strong>Data:</strong> {{ selected_date }}</p>
+    <p><strong>Horário:</strong> {{ selected_time }}</p>
+
+    <form method="post" action="#">
+        {% csrf_token %}
+        <button type="submit" class="btn">Confirmar agendamento</button>
+    </form>
+
+</div>
+{% endblock %}
