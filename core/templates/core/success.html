@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="success-container">
+
+    <h1>Agendamento Confirmado! 🎉</h1>
+
+    <p class="success-text">
+        Seu horário foi reservado com sucesso.  
+        Em breve você receberá a confirmação no painel de usuario e no Whatsapp.
+    </p>
+
+    <a href="{% url 'home' %}" class="success-btn">Voltar para a Home</a>
+
+</div>
+{% endblock %}

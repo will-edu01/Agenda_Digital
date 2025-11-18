@@ -2,7 +2,7 @@ from datetime import datetime
 from django.http import JsonResponse
 from .utils.schedule import get_available_slots
 from django.shortcuts import render, redirect
-from .models import Service
+from .models import Service, Appointment
 
 
 def home(request):
@@ -79,3 +79,35 @@ def confirm_appointment_view(request):
     }
 
     return render(request, "core/confirm.html", context)
+
+
+def save_appointment_view(request):
+    if request.method != "POST":
+        return redirect("home")
+
+    selected_date = request.POST.get("selected_date")
+    selected_time = request.POST.get("selected_time")
+    service_ids = request.POST.getlist("services")
+
+    services = Service.objects.filter(id__in=service_ids)
+
+    total_minutes = sum(s.duration_minutes for s in services)
+    total_price = sum(s.price for s in services)
+
+    # calcular hora de término
+    from datetime import datetime, timedelta
+    start_dt = datetime.strptime(f"{selected_date} {selected_time}", "%Y-%m-%d %H:%M")
+    end_dt = start_dt + timedelta(minutes=total_minutes)
+
+    # criar agendamento
+    ap = Appointment.objects.create(
+        user=request.user,
+        date=selected_date,
+        start_time=selected_time,
+        end_time=end_dt.time(),
+        total_price=total_price,
+        total_minutes=total_minutes,
+    )
+    ap.services.set(services)
+
+    return render(request, "core/success.html", {"appointment": ap})

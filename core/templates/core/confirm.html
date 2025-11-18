@@ -2,29 +2,38 @@
 {% load static %}
 
 {% block content %}
-<div class="schedule-container">
 
-    <h2>Confirme seu agendamento</h2>
+<div class="page-wrapper">
 
-    <h3>Serviços escolhidos:</h3>
-    <ul>
-        {% for s in services %}
+    <h2 class="section-title">Confirme seu agendamento</h2>
+    <p class="section-sub">Revise as informações antes de finalizar</p>
+
+    <div class="section-block">
+        <h4>Serviços escolhidos:</h4>
+        <ul>
+            {% for s in services %}
             <li>{{ s.name }} — R$ {{ s.price }} — {{ s.duration_minutes }} min</li>
-        {% endfor %}
-    </ul>
+            {% endfor %}
+        </ul>
 
-    <p><strong>Tempo total:</strong> {{ total_minutes }} minutos</p>
-    <p><strong>Preço total:</strong> R$ {{ total_price }}</p>
+        <p><strong>Data:</strong> {{ selected_date }}</p>
+        <p><strong>Horário:</strong> {{ selected_time }}</p>
+        <p><strong>Total:</strong> R$ {{ total_price }}</p>
+    </div>
 
-    <hr>
-
-    <p><strong>Data:</strong> {{ selected_date }}</p>
-    <p><strong>Horário:</strong> {{ selected_time }}</p>
-
-    <form method="post" action="#">
+    <form method="post" action="{% url 'save_appointment' %}" style="text-align:center;">
         {% csrf_token %}
-        <button type="submit" class="btn">Confirmar agendamento</button>
+
+        {% for id in service_ids %}
+        <input type="hidden" name="services" value="{{ id }}">
+        {% endfor %}
+
+        <input type="hidden" name="selected_date" value="{{ selected_date }}">
+        <input type="hidden" name="selected_time" value="{{ selected_time }}">
+
+        <button type="submit" class="btn-primary">Confirmar agendamento</button>
     </form>
 
 </div>
+
 {% endblock %}

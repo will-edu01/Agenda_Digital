@@ -1,78 +1,38 @@
-{% extends 'core/base.html' %}
-
-<h1 style="color:red; font-size:40px;">TESTE DE TEMPLATE</h1>
-
-
+{% extends "core/base.html" %}
 {% load static %}
 
-
-<style>
-    .times-wrapper {
-        max-width: 420px;   /* agora nunca ultrapassa */
-        margin: 0 auto;     /* centraliza no meio */
-    }
-
-    .times-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-        gap: 10px;
-
-        background: #fff6fb;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid #ffb5d4;
-
-        max-height: 250px;   /* gaveta */
-        overflow-y: auto;    /* scroll vertical */
-    }
-
-    .time-btn {
-        padding: 10px 6px;
-        border: 1px solid #ff69b4;
-        background: white;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.2s;
-        text-align: center;
-    }
-
-    .time-btn:hover {
-        background: #ffe3f1;
-    }
-
-    .time-btn.selected {
-        background: #ff69b4;
-        color: white;
-    }
-</style>
-
-
 {% block content %}
-<div class="schedule-container">
 
-    <h2>Agendamento</h2>
+<div class="page-wrapper">
 
-    <h3>Serviços selecionados:</h3>
-    <ul>
-        {% for s in services %}
-        <li>{{ s.name }} — R$ {{ s.price }} — {{ s.duration_minutes }} min</li>
-        {% endfor %}
-    </ul>
+    <h2 class="section-title">Escolha a data</h2>
+    <p class="section-sub">Revise e escolha um horário disponível</p>
 
-    <p><strong>Tempo total:</strong> {{ total_minutes }} minutos</p>
-    <p><strong>Preço total:</strong> R$ {{ total_price }}</p>
+    <div class="section-block">
+        <h4>Serviços selecionados</h4>
+        <ul>
+            {% for s in services %}
+            <li>{{ s.name }} — R$ {{ s.price }} — {{ s.duration_minutes }} min</li>
+            {% endfor %}
+        </ul>
 
-    <hr>
-
-    <h3>Escolha uma data:</h3>
-    <input type="date" id="date-input" class="date-field">
-
-    <h3 style="margin-top:20px;">Horários disponíveis:</h3>
-    <div id="times-container">
-        <p>Selecione uma data acima</p>
+        <p><strong>Tempo total:</strong> {{ total_minutes }} min</p>
+        <p><strong>Preço total:</strong> R$ {{ total_price }}</p>
     </div>
 
-    <form id="confirm-form" method="post" action="{% url 'confirm' %}">
+    <div class="section-block">
+        <label>Selecione uma data:</label><br>
+        <input type="date" id="date-input" class="date-field">
+    </div>
+
+    <div class="section-block">
+        <h4>Horários disponíveis</h4>
+        <div id="times-container">
+            <p>Selecione uma data acima</p>
+        </div>
+    </div>
+
+    <form method="post" id="confirm-form" action="{% url 'confirm' %}" style="text-align:center;">
         {% csrf_token %}
         <input type="hidden" name="selected_time" id="selected-time">
         <input type="hidden" name="selected_date" id="selected-date">
@@ -81,12 +41,11 @@
         <input type="hidden" name="services" value="{{ id }}">
         {% endfor %}
 
-        <button type="submit" id="continue-btn" class="btn" disabled>
-            Continuar
-        </button>
+        <button type="submit" id="continue-btn" class="btn-primary" disabled>Continuar</button>
     </form>
 
 </div>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -98,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const selectedDateInput = document.getElementById("selected-date");
 
     const duration = Number("{{ total_minutes|default:0 }}");
-    
+
     dateInput.addEventListener("change", () => {
         const date = dateInput.value;
         selectedDateInput.value = date;
@@ -112,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
         fetch(`/horarios/?date=${date}&duration=${duration}`)
             .then(res => res.json())
             .then(data => {
+
                 const slots = data.slots;
 
                 if (slots.length === 0) {
@@ -120,7 +80,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     return;
                 }
 
-                let html = `<div class="times-grid">`;
+                let html = `<div class='times-grid'>`;
 
                 slots.forEach(time => {
                     html += `
@@ -131,14 +91,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
 
                 html += `</div>`;
-                timesContainer.innerHTML = `
-                    <div class="times-wrapper">
-                        ${html}
-                    </div>
-                `;
+                timesContainer.innerHTML = html;
 
                 document.querySelectorAll(".time-btn").forEach(btn => {
                     btn.addEventListener("click", () => {
+
                         document.querySelectorAll(".time-btn")
                             .forEach(b => b.classList.remove("selected"));
 
@@ -152,8 +109,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 continueBtn.disabled = true;
             });
     });
-}); 
+});
 </script>
-
 
 {% endblock %}

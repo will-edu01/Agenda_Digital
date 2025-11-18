@@ -54,6 +54,11 @@
     text-align: center;
 }
 
+.container {
+    min-height: 100vh;
+}
+
+
 
 /* ---------- LOGIN PAGE STYLE ---------- */
 
@@ -62,8 +67,8 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .login-container {
@@ -72,9 +77,6 @@ body {
     height: 100vh;
 }
 
-/* Ajuste da página de cadastro para ficar igual à tela de login */
-
-/* Garantir que o container principal ocupe 100% da altura */
 .register-container {
     display: flex;
     height: 100vh;
@@ -215,8 +217,6 @@ body {
     order: 2;
 }
 
-
-
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -248,39 +248,213 @@ body {
 }
 
 
-/* Container dos horários no modo gaveta */
-.times-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
-    gap: 10px;
-    margin-top: 15px;
-
-    border: 1px solid #ffb9d9;
+#times-container {
+    max-height: 180px;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #f0c8dc;
+    background: #fff;
     border-radius: 10px;
-    padding: 10px;
-    background: #fffafc;
-
-    /* GAVETA */
-    max-height: 250px;   /* altura máxima */
-    overflow-y: auto;    /* ativa rolagem vertical */
-    padding-right: 5px;  /* evita barra colada */
 }
 
-/* botões de horário */
+/* Estilo da scrollbar */
+#times-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+#times-container::-webkit-scrollbar-thumb {
+    background: #e59ac8;
+    border-radius: 4px;
+}
+
+#times-container::-webkit-scrollbar-track {
+    background: #f7e9f3;
+}
+
+/* Grid dos horários */
+.times-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+    gap: 10px;
+}
+
+/* Botões de horário */
 .time-btn {
-    padding: 10px 5px;
-    border: 1px solid #ff69b4;
-    border-radius: 8px;
-    background: white;
+    padding: 8px 0;
+    text-align: center;
+    background: #ffe2f1;
+    border: 1px solid #ffc3dd;
+    border-radius: 6px;
+    font-size: 14px;
     cursor: pointer;
     transition: 0.2s;
 }
 
 .time-btn:hover {
-    background: #ffe3f1;
+    background: #f7cade;
 }
 
 .time-btn.selected {
-    background: #ff69b4;
+    background: #e37ab7;
     color: white;
+    font-weight: bold;
+}
+
+
+/* ====== Layout base para páginas (home / select_datetime / confirm) ====== */
+.page-wrapper {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* cabeçalho da seção */
+.section-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 18px #00000012;
+    margin-bottom: 18px;
+}
+
+/* título grande do bloco (reutiliza visual do login) */
+.section-title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* texto descritivo menor */
+.section-sub {
+    text-align: center;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.section-block {
+    margin-bottom: 32px;
+}
+
+.section-block p, .section-block label {
+    color: #444;
+}
+
+.section-block ul {
+    list-style: none;
+    padding: 0;
+}
+
+.section-block ul li {
+    margin-bottom: 6px;
+}
+
+/* grid para conteúdos lado-a-lado (imagem + info) */
+.two-columns {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 20px;
+    align-items: start;
+}
+
+/* cartão de serviço (refina o .service-item) */
+.service-item {
+    background: #fff7fb;
+    border: 1px solid #ffe7f2;
+    padding: 12px;
+    border-radius: 10px;
+}
+
+/* resumo lateral (preço/duração) */
+.summary-card {
+    background: linear-gradient(180deg,#fdf1f6,#fffafc);
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid #ffdfe9;
+    box-shadow: 0 4px 10px #00000006;
+}
+
+/* botões principais */
+.btn-primary {
+    margin-top: 25px;
+    display: inline-block;
+    padding: 12px 24px;
+    background: #ff8bb9;
+    color: white;
+    border-radius: 25px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.btn-primary:hover {
+    background: #ff76ad;
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.summary-text {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #333;
+}
+
+/* estilo dos inputs (data) */
+.date-field {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+/* pequenas responsividades */
+@media (max-width: 900px) {
+    .two-columns {
+        grid-template-columns: 1fr;
+    }
+    .page-wrapper {
+        padding: 12px;
+        margin: 18px 12px;
+    }
+}
+
+/* --- SUCCESS PAGE --- */
+.success-container {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.success-container h1 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #444;
+}
+
+.success-text {
+    font-size: 18px;
+    margin-bottom: 35px;
+    color: #555;
+}
+
+.success-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 30px;
+    background: #f8bfc5;
+    border: 2px solid #f4a5ad;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+.success-btn:hover {
+    background: #efb1b8;
 }

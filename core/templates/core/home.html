@@ -1,77 +1,75 @@
-{% extends 'core/base.html' %}
+{% extends "core/base.html" %}
 {% load static %}
 
-{% block title %}Home — Espaço Ana Valente{% endblock %}
-
 {% block content %}
-<div class="home-container">
-    <section class="intro">
-        <h1>Serviços</h1>
-        <p>Escolha 1 ou mais serviços e veja o preço e tempo total.</p>
-    </section>
 
-    <section class="services-list">
-        <form id="services-form" method="post" action="{% url 'select_datetime' %}">
-            {% csrf_token %}
-            <div class="services-grid">
-                {% for s in services %}
-                <label class="service-item">
-                    <input type="checkbox"
-                           name="services"
-                           class="service-checkbox"
-                           data-price="{{ s.price }}"
-                           data-duration="{{ s.duration_minutes }}"
-                           value="{{ s.id }}">
-                    <div class="service-info">
-                        <strong>{{ s.name }}</strong><br>
-                        <small>{{ s.description }}</small>
-                    </div>
-                    <div class="service-meta">
-                        <span>R$ {{ s.price }}</span>
-                        <span>{{ s.duration_minutes }} min</span>
-                    </div>
-                </label>
-                {% empty %}
-                <p>Nenhum serviço cadastrado. Peça para a administradora adicionar pelo admin.</p>
-                {% endfor %}
-            </div>
+<div class="page-wrapper">
 
-            <div class="summary">
-                <p>Tempo total: <span id="total-duration">0</span> min</p>
-                <p>Preço total: R$ <span id="total-price">0.00</span></p>
+    <h1 class="section-title">Serviços</h1>
+    <p class="section-sub">Selecione um ou mais serviços para continuar</p>
 
-                <!-- botão de continuar leva para seleção de data/hora no próximo passo (ainda não implementado) -->
-                <button id="continue-btn" class="btn" type="submit" disabled>Continuar</button>
-            </div>
-        </form>
-    </section>
+    <form id="services-form" method="post" action="{% url 'select_datetime' %}">
+        {% csrf_token %}
+
+        <div class="services-grid">
+            {% for s in services %}
+            <label class="service-item">
+                <input type="checkbox" name="services" value="{{ s.id }}">
+                <span>
+                    <strong>{{ s.name }}</strong>
+                </span>
+                <div class="service-meta">
+                    R$ {{ s.price }}<br>
+                    {{ s.duration_minutes }} min
+                </div>
+            </label>
+            {% endfor %}
+        </div>
+
+        <div class="summary-text">
+            <p>Tempo total: <strong id="total-duration">0</strong> min</p>
+            <p>Preço total: <strong id="total-price">0.00</strong></p>
+        </div>
+
+        <div style="text-align:center; margin-top:25px;">
+            <button id="continue-btn" class="btn-primary" type="submit" disabled>Continuar</button>
+        </div>
+
+    </form>
+
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const checkboxes = document.querySelectorAll('.service-checkbox');
-    const totalPriceEl = document.getElementById('total-price');
-    const totalDurationEl = document.getElementById('total-duration');
-    const continueBtn = document.getElementById('continue-btn');
+// -------- ATUALIZA TEMPO E PREÇO EM TEMPO REAL --------
+document.addEventListener("DOMContentLoaded", () => {
+    const checkboxes = document.querySelectorAll("input[name='services']");
+    const totalDuration = document.getElementById("total-duration");
+    const totalPrice = document.getElementById("total-price");
+    const continueBtn = document.getElementById("continue-btn");
 
     function updateSummary() {
-        let totalPrice = 0;
-        let totalDuration = 0;
-        let any = false;
+        let duration = 0;
+        let price = 0;
+
         checkboxes.forEach(cb => {
             if (cb.checked) {
-                any = true;
-                totalPrice += parseFloat(cb.dataset.price || 0);
-                totalDuration += parseInt(cb.dataset.duration || 0, 10);
+                const meta = cb.parentElement.querySelector(".service-meta").innerHTML;
+                const priceMatch = meta.match(/R\$ ([0-9.,]+)/);
+                const minMatch = meta.match(/(\d+) min/);
+
+                if (priceMatch) price += parseFloat(priceMatch[1].replace(",", "."));
+                if (minMatch) duration += parseInt(minMatch[1]);
             }
         });
-        totalPriceEl.textContent = totalPrice.toFixed(2);
-        totalDurationEl.textContent = totalDuration;
-        continueBtn.disabled = !any;
+
+        totalDuration.textContent = duration;
+        totalPrice.textContent = price.toFixed(2);
+
+        continueBtn.disabled = duration === 0;
     }
 
-    checkboxes.forEach(cb => cb.addEventListener('change', updateSummary));
-    updateSummary();
+    checkboxes.forEach(cb => cb.addEventListener("change", updateSummary));
 });
 </script>
+
 {% endblock %}
