@@ -5,6 +5,8 @@ from .views import (
     get_available_times,
     confirm_appointment_view,
     save_appointment_view,
+    confirm_api,
+    save_appointment_api,
 )
 
 
@@ -14,4 +16,6 @@ urlpatterns = [
     path('horarios/', get_available_times, name='available_times'),
     path("confirmar/", confirm_appointment_view, name="confirm"),
     path("salvar-agendamento/", save_appointment_view, name="save_appointment"),
+    path("api/confirm/", confirm_api, name="confirm_api"),
+    path("api/save/", save_appointment_api, name="save_appointment_api"),
 ]

@@ -9,7 +9,6 @@
     <title>Login</title>
 </head>
 <body>
-
 <div class="login-container">
 
     <!-- LADO ESQUERDO (IMAGEM COM BLUR) -->
@@ -19,6 +18,20 @@
     <div class="login-form-wrapper">
 
         <h2 class="login-title">Login</h2>
+
+{% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% if form.non_field_errors %}
+  <div class="error-box">
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
 
         <form method="POST">
             {% csrf_token %}

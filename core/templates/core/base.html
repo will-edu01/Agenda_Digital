@@ -1,12 +1,120 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Espaço Ana Valente{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Espaço Ana Valente</title>
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+
+  {% block extra_head %}{% endblock %}
+  <!-- HEADER (opcional — preenchido apenas na home via bloco show_header) -->
+  {% block show_header %}{% endblock %}
+
+  <!-- Conteúdo principal -->
+  <main>
     {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer simples (padrão em todas páginas) -->
+  <footer style="text-align:center; padding:20px 10px; color:#777;">
+    © {{ now.year }} Espaço Ana Valente — contato: (xx) xxxxx-xxxx
+  </footer>
+
+  <!-- Script do menu do usuário (está seguro mesmo que não exista o HTML do menu) -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+      const trigger = document.getElementById("user-trigger");
+      const dropdown = document.getElementById("user-dropdown");
+
+      if (!trigger || !dropdown) return;
+
+      trigger.addEventListener("click", function(e) {
+          e.stopPropagation();
+          dropdown.classList.toggle("show");
+      });
+
+      document.addEventListener("click", function(e) {
+          if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+              dropdown.classList.remove("show");
+          }
+      });
+  });
+  </script>
+
+<!-- TOAST CSS -->
+<style>
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 14px 18px;
+    background: #333;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 15px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+    transition: all .35s ease;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #17a2b8; }
+</style>
+
+<!-- TOAST HTML -->
+<div id="toast" class="toast"></div>
+
+<!-- TOAST SCRIPT -->
+<script>
+function showToast(message, type="info") {
+    const toast = document.getElementById("toast");
+    toast.className = "toast " + type;
+    toast.textContent = message;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3500);
+}
+</script>
+
+<!-- AUTO-SHOW DJANGO MESSAGES -->
+<div id="django-messages"
+     data-msgs='[
+        {% for message in messages %}
+            {"text": "{{ message|escapejs }}", "tag": "{{ message.tags }}"}{% if not forloop.last %},{% endif %}
+        {% endfor %}
+     ]'>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const el = document.getElementById("django-messages");
+    if (!el) return;
+
+    let msgs = [];
+    try {
+        msgs = JSON.parse(el.dataset.msgs);
+    } catch (e) {
+        console.error("Erro ao ler mensagens Django:", e);
+    }
+
+    msgs.forEach(m => showToast(m.text, m.tag));
+});
+</script>
+
 </body>
 </html>

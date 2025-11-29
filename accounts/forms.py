@@ -7,13 +7,13 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="Senha", widget=forms.PasswordInput(attrs={"placeholder": "Senha", "class": "input-field"}))
     remember_me = forms.BooleanField(required=False, label="Lembrar-me")
 
-
     def clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
 
-        user = authenticate(email=email, password=password)
+        # Usar 'username' garante compatibilidade com o backend padrão quando USERNAME_FIELD = "email"
+        user = authenticate(username=email, password=password)
 
         if user is None:
             raise forms.ValidationError("E-mail ou senha inválidos.")

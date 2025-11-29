@@ -1,75 +1,339 @@
 {% extends "core/base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+{% block show_header %}
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo"><a href="{% url 'home' %}">Espaço <strong>Ana Valente</strong></a></div>
+    <nav class="header-right">
+      <div class="user-menu-wrapper">
+        <div id="user-trigger" class="user-info">
+            <span class="user-name">
+                {% if request.user.is_authenticated %}
+                    {{ request.user.first_name|default:request.user.email|cut:"@gmail.com" }}
+                {% else %}
+                    Usuário
+                {% endif %}
+            </span>
+            <img src="{% static 'img/user-placeholder.png' %}" class="user-avatar" alt="Usuário">
+        </div>
+        <div id="user-dropdown" class="user-dropdown">
+            <a href="#" class="dropdown-item">👤 Perfil</a>
+            <a href="#" class="dropdown-item">📅 Minha Agenda</a>
+            {% if request.user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="dropdown-item">↩️ Sair</a>
+            {% else %}
+              <a href="{% url 'login' %}" class="dropdown-item">🔐 Entrar</a>
+            {% endif %}
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
 {% block content %}
+<main class="home-root">
 
-<div class="page-wrapper">
+  <!-- HERO / BANNER -->
+  <section class="hero" aria-hidden="false">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <h1 class="hero-title">Espaço Ana Valente</h1>
+        <p class="hero-sub">Em nosso espaço a beleza encontra seu lugar. Profissionalismo, carinho e resultados — agende com praticidade.</p>
+        <a href="#agendamento" class="btn-hero">Agendar agora</a>
+      </div>
+      <div class="hero-right" aria-hidden="true">
+        <img src="{% static 'img/salao.jpeg' %}" alt="Banner do salão" class="hero-image">
+        <div class="hero-overlay"></div>
+      </div>
+    </div>
+  </section>
 
-    <h1 class="section-title">Serviços</h1>
-    <p class="section-sub">Selecione um ou mais serviços para continuar</p>
+  <!-- SOBRE O SALÃO (rosa claro com foto) -->
+  <section class="about-section" aria-label="Sobre o salão">
+    <div class="about-text">
+      <h3 class="about-title">Sobre o Espaço</h3>
+      <p class="about-desc">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a arcu ut nisl laoreet faucibus.
+        Mauris viverra, felis eu laoreet iaculis, nibh ipsum cursus nunc, a lobortis justo neque quis nunc.
+      </p>
+      <p class="about-desc" style="margin-top:10px; font-weight:600;">Atendimentos por agendamento — conforto e acolhimento.</p>
+    </div>
+    <div class="about-photo">
+      <img src="{% static 'img/profile.png' %}" alt="Profissional">
+    </div>
+  </section>
 
-    <form id="services-form" method="post" action="{% url 'select_datetime' %}">
-        {% csrf_token %}
+  <!-- AGENDAMENTO E SERVIÇOS -->
+  <section id="agendamento" class="agendamento-section">
+    <h2 class="section-title">Agendamento</h2>
+    <p class="section-sub">Escolha um ou mais serviços e selecione data e horário — tudo sem sair da página.</p>
 
-        <div class="services-grid">
-            {% for s in services %}
-            <label class="service-item">
-                <input type="checkbox" name="services" value="{{ s.id }}">
-                <span>
-                    <strong>{{ s.name }}</strong>
-                </span>
-                <div class="service-meta">
-                    R$ {{ s.price }}<br>
-                    {{ s.duration_minutes }} min
-                </div>
-            </label>
-            {% endfor %}
-        </div>
+    <form id="services-form" class="services-form">
+      {% csrf_token %}
+      <div class="services-grid">
+        {% for s in services %}
+        <label class="service-card">
+          <div class="service-row-checkbox">
+            <input class="service-checkbox" type="checkbox" name="services" value="{{ s.id }}">
+            <div class="service-info">
+              <div class="service-name">{{ s.name }}</div>
+              <div class="service-desc">{{ s.description|truncatechars:80 }}</div>
+            </div>
+          </div>
+          <div class="service-meta">
+            <div>R$ {{ s.price }}</div>
+            <div style="font-size:13px;color:#666;">{{ s.duration_minutes }} min</div>
+          </div>
+        </label>
+        {% endfor %}
+      </div>
 
-        <div class="summary-text">
-            <p>Tempo total: <strong id="total-duration">0</strong> min</p>
-            <p>Preço total: <strong id="total-price">0.00</strong></p>
-        </div>
-
-        <div style="text-align:center; margin-top:25px;">
-            <button id="continue-btn" class="btn-primary" type="submit" disabled>Continuar</button>
-        </div>
-
+      <div class="summary-row">
+        <div class="summary-text">Tempo: <strong id="total-duration">0</strong> min — Valor: <strong id="total-price">0.00</strong></div>
+        <div class="summary-action"><button id="continue-btn" class="btn-main" type="button" disabled>Continuar</button></div>
+      </div>
     </form>
+  </section>
 
-</div>
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-left">© {{ now.year }} Espaço Ana Valente</div>
+      <div class="footer-right">Contato: contato@espacoana.com • WhatsApp: (00) 90000-0000</div>
+    </div>
+  </footer>
 
+  <!-- MODAL: SELECT DATETIME -->
+  <div id="modal-select-datetime" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true">
+      <button class="modal-close" onclick="closeSelectDatetimeModal()">✕</button>
+      <h2 class="modal-title">Selecione Data e Horário</h2>
+      <div class="modal-field">
+        <label for="modal-date">Data</label>
+        <input type="date" id="modal-date" class="date-field">
+      </div>
+      <div class="modal-times-wrapper">
+        <h3>Horários disponíveis</h3>
+        <div id="modal-times" class="modal-times-grid">
+          <p style="grid-column:1/-1;color:#666;text-align:center">Selecione uma data</p>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <button id="modal-select-next" class="btn-main" disabled>Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CONFIRM -->
+  <div id="modal-confirm" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true">
+      <button class="modal-close" onclick="closeConfirmModal()">✕</button>
+      <h2 class="modal-title">Confirme seu agendamento</h2>
+      <p id="confirm-sub" class="modal-sub"></p>
+      <ul id="confirm-services" class="modal-confirm-list"></ul>
+      <div class="modal-confirm-footer">
+        <div>
+          <div><strong>Tempo:</strong> <span id="confirm-total-min">0</span> min</div>
+          <div><strong>Valor:</strong> R$ <span id="confirm-total-price">0.00</span></div>
+        </div>
+        <div style="min-width:160px;">
+          <button id="confirm-final-btn" class="btn-main">Confirmar agendamento</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SUCCESS -->
+  <div id="modal-success" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-success">
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" style="display:block;margin:0 auto">
+          <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#eaf7f5"/>
+          <path d="M9 12l2 2 4-4" stroke="#17a085" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>Agendamento confirmado!</h3>
+        <p class="success-text">Aguarde a confirmação via WhatsApp e e-mail.</p>
+        <button class="btn-main" onclick="closeSuccessModal()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- --------- SCRIPTS --------- -->
 <script>
-// -------- ATUALIZA TEMPO E PREÇO EM TEMPO REAL --------
-document.addEventListener("DOMContentLoaded", () => {
-    const checkboxes = document.querySelectorAll("input[name='services']");
-    const totalDuration = document.getElementById("total-duration");
-    const totalPrice = document.getElementById("total-price");
-    const continueBtn = document.getElementById("continue-btn");
 
-    function updateSummary() {
-        let duration = 0;
-        let price = 0;
+const IS_LOGGED = Boolean(Number("{{ request.user.is_authenticated|yesno:'1,0' }}"));
 
-        checkboxes.forEach(cb => {
-            if (cb.checked) {
-                const meta = cb.parentElement.querySelector(".service-meta").innerHTML;
-                const priceMatch = meta.match(/R\$ ([0-9.,]+)/);
-                const minMatch = meta.match(/(\d+) min/);
+/* CSRF helper */
+function getCookie(name){ const v = document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)'); return v ? v.pop() : ''; }
+const csrftoken = getCookie('csrftoken');
 
-                if (priceMatch) price += parseFloat(priceMatch[1].replace(",", "."));
-                if (minMatch) duration += parseInt(minMatch[1]);
-            }
-        });
+/* Menu user */
+document.addEventListener("DOMContentLoaded", function(){
+  const trigger = document.getElementById("user-trigger");
+  const dropdown = document.getElementById("user-dropdown");
+  if (!trigger || !dropdown) return;
+  trigger.addEventListener("click", function(e){ e.stopPropagation(); dropdown.classList.toggle("show"); });
+  document.addEventListener("click", function(e){ if (!trigger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove("show"); });
+});
 
-        totalDuration.textContent = duration;
-        totalPrice.textContent = price.toFixed(2);
+/* Summary */
+function parsePrice(text){ if(!text) return 0; text = text.replace('R$', '').replace(/\s/g,'').replace(',', '.'); const v = parseFloat(text); return isNaN(v) ? 0 : v; }
+function parseMinutes(text){ if(!text) return 0; const m = text.replace('min','').trim(); const v = parseInt(m); return isNaN(v) ? 0 : v; }
+function updateSummary(){
+  let price=0, minutes=0;
+  document.querySelectorAll(".service-checkbox").forEach(cb=>{
+    if(cb.checked){
+      const row = cb.closest(".service-card");
+      price += parsePrice(row.querySelector(".service-meta div").textContent);
+      minutes += parseMinutes(row.querySelector(".service-meta div:nth-child(2)").textContent);
+    }
+  });
+  document.getElementById("total-duration").textContent = minutes;
+  document.getElementById("total-price").textContent = price.toFixed(2);
+  document.getElementById("continue-btn").disabled = minutes === 0;
+}
+document.addEventListener("DOMContentLoaded", function(){ document.querySelectorAll(".service-checkbox").forEach(cb=>cb.addEventListener("change", updateSummary)); });
 
-        continueBtn.disabled = duration === 0;
+/* MODAL SELECT DATETIME */
+function openSelectDatetimeModal(){ document.getElementById("modal-select-datetime").classList.add("show"); document.getElementById("modal-date").value=''; document.getElementById("modal-times").innerHTML='<p style="grid-column:1/-1;color:#666;text-align:center">Selecione uma data</p>'; document.getElementById("modal-select-next").disabled=true; }
+function closeSelectDatetimeModal(){ document.getElementById("modal-select-datetime").classList.remove("show"); }
+
+/* abrir modal ao clicar continuar */
+document.getElementById("continue-btn").addEventListener("click", function(){
+  if (!IS_LOGGED) {
+    alert("Por favor, faça login para continuar com o agendamento.");
+    window.location.href = "{% url 'login' %}";
+    return;
+  }
+  const selected = Array.from(document.querySelectorAll(".service-checkbox:checked")).map(i=>i.value);
+  if (!selected.length) return alert("Selecione pelo menos um serviço.");
+  openSelectDatetimeModal();
+});
+
+/* buscar horários */
+document.getElementById("modal-date").addEventListener("change", async function(){
+  const date = this.value;
+  const timesWrapper = document.getElementById("modal-times");
+  const totalMinutes = parseInt(document.getElementById("total-duration").textContent) || 0;
+  timesWrapper.innerHTML = ''; document.getElementById("modal-select-next").disabled=true;
+  if(!date) return;
+  try {
+    const res = await fetch(`/horarios/?date=${date}&duration=${totalMinutes}`);
+    const data = await res.json();
+    if(!data.slots || !data.slots.length){
+      timesWrapper.innerHTML = "<p style='grid-column:1/-1;color:#666;text-align:center'>Nenhum horário disponível nesta data.</p>";
+      return;
+    }
+    data.slots.forEach(time=>{
+      const btn = document.createElement("div");
+      btn.className = "time-btn";
+      btn.textContent = time;
+      btn.addEventListener("click", function(){
+        document.querySelectorAll("#modal-times .time-btn").forEach(e=>e.classList.remove("selected"));
+        btn.classList.add("selected");
+        document.getElementById("modal-select-next").dataset.time = time;
+        document.getElementById("modal-select-next").dataset.date = date;
+        document.getElementById("modal-select-next").disabled = false;
+      });
+      timesWrapper.appendChild(btn);
+    });
+  } catch (err) {
+    timesWrapper.innerHTML = "<p style='grid-column:1/-1;color:#c33;text-align:center'>Erro ao buscar horários.</p>";
+    console.error(err);
+  }
+});
+
+/* chamar confirm_api (opção C) */
+document.getElementById("modal-select-next").addEventListener("click", async function(){
+  const btn = this;
+  const services = Array.from(document.querySelectorAll(".service-checkbox:checked")).map(i=>i.value);
+  const selected_date = btn.dataset.date;
+  const selected_time = btn.dataset.time;
+  if(!services.length || !selected_date || !selected_time) return alert("Dados incompletos.");
+  const form = new FormData();
+  services.forEach(id=>form.append("services[]", id));
+  form.append("selected_date", selected_date);
+  form.append("selected_time", selected_time);
+  try {
+    const res = await fetch("{% url 'confirm_api' %}", { method:"POST", body: form, headers: {"X-CSRFToken": csrftoken} });
+    const data = await res.json();
+    if(!data.ok){ alert(data.error || "Erro ao montar confirmação."); return; }
+    fillConfirmModal(data);
+    closeSelectDatetimeModal();
+    openConfirmModal();
+  } catch(err){ console.error(err); alert("Erro ao confirmar. Tente novamente."); }
+});
+
+/* MODAL CONFIRM */
+function openConfirmModal(){ document.getElementById("modal-confirm").classList.add("show"); }
+function closeConfirmModal(){ document.getElementById("modal-confirm").classList.remove("show"); }
+
+function fillConfirmModal(data){
+  const list = document.getElementById("confirm-services");
+  list.innerHTML = "";
+  data.services.forEach(s=>{
+    const li = document.createElement("li");
+    li.className = "modal-confirm-item";
+    li.innerHTML = `<div class="name">${s.name} <small style="display:block;color:#666">${s.duration} min</small></div><div class="price">R$ ${parseFloat(s.price).toFixed(2)}</div>`;
+    list.appendChild(li);
+  });
+  document.getElementById("confirm-total-min").textContent = data.total_minutes;
+  document.getElementById("confirm-total-price").textContent = parseFloat(data.total_price).toFixed(2);
+  document.getElementById("confirm-sub").textContent = `${data.selected_date} — ${data.selected_time}`;
+  window.__appointment_payload = { service_ids: data._service_ids || [], selected_date: data.selected_date, selected_time: data.selected_time };
+}
+
+/* confirmar final (save via AJAX) */
+document.getElementById("confirm-final-btn").addEventListener("click", async function(){
+  const ids = Array.from(document.querySelectorAll(".service-checkbox:checked")).map(i=>i.value);
+  const form = new FormData();
+  ids.forEach(id=>form.append("services[]", id));
+  form.append("selected_date", window.__appointment_payload.selected_date);
+  form.append("selected_time", window.__appointment_payload.selected_time);
+  try {
+    const res = await fetch("{% url 'save_appointment_api' %}", { method:"POST", body: form, headers: {"X-CSRFToken": csrftoken} });
+    const result = await res.json();
+    if(!result.ok){ alert(result.error || "Erro ao salvar agendamento."); return; }
+    closeConfirmModal();
+    openSuccessModal();
+  } catch(err){ console.error(err); alert("Erro ao salvar. Tente novamente."); }
+});
+
+/* MODAL SUCCESS */
+function openSuccessModal(){ document.getElementById("modal-success").classList.add("show"); }
+function closeSuccessModal(){ document.getElementById("modal-success").classList.remove("show"); }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const trigger = document.querySelector("#user-trigger");
+    const dropdown = document.querySelector("#user-dropdown");
+
+    if (!trigger || !dropdown) {
+        console.warn("Menu do usuário não encontrado no DOM.");
+        return;
     }
 
-    checkboxes.forEach(cb => cb.addEventListener("change", updateSummary));
-});
-</script>
+    // Abre/fecha ao clicar
+    trigger.onclick = function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle("show");
+    };
 
+    // Fecha ao clicar fora
+    document.addEventListener("click", function(e) {
+        if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove("show");
+        }
+    });
+});
+
+</script>
 {% endblock %}
