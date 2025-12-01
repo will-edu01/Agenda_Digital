@@ -1,0 +1,106 @@
+{# templates/core/partials/modals.html #}
+
+<!-- MODAL: SELECT DATETIME -->
+<div id="modal-select-datetime" class="modal-overlay" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <button type="button" class="modal-close" data-action="close-modal">✕</button>
+    <h3 class="modal-title">Escolha uma data</h3>
+
+    <div class="modal-field">
+      <label for="modal-date">Data</label>
+      <input id="modal-date" type="date" class="date-field" aria-label="Data do agendamento">
+    </div>
+
+    <div class="modal-times-wrapper">
+      <h4>Horários disponíveis</h4>
+      <div id="modal-times" class="modal-times-grid">
+        <p style="grid-column:1/-1;color:#666;text-align:center">Selecione uma data</p>
+      </div>
+    </div>
+
+    <div style="margin-top:14px; text-align:right;">
+      <button id="modal-select-next" class="confirm-btn" disabled>Selecionar horário e confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SUMMARY -->
+<div id="modal-summary" class="modal-overlay" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true">
+    <button type="button" class="modal-close" data-action="close-modal">✕</button>
+    <h3 class="modal-title">Confirmar Agendamento</h3>
+
+    <div class="summary-content">
+      <p><strong>Serviços:</strong></p>
+      <ul id="summary-services"></ul>
+
+      <p><strong>Tempo total:</strong> <span id="summary-time"></span> min</p>
+      <p><strong>Valor total:</strong> R$ <span id="summary-price"></span></p>
+
+      <p><strong>Data:</strong> <span id="summary-date"></span></p>
+      <p><strong>Horário:</strong> <span id="summary-hour"></span></p>
+    </div>
+
+    <div class="summary-actions">
+      <button id="summary-back" class="confirm-btn" type="button">Voltar</button>
+      <button id="summary-confirm" class="confirm-btn" type="button">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: SUCCESS -->
+<div id="modal-success" class="modal-overlay" aria-hidden="true">
+  <div class="modal-box">
+    <div class="modal-success" style="text-align:center;">
+      <svg width="72" height="72" viewBox="0 0 24 24" fill="none" style="display:block;margin:0 auto">
+        <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#eaf7f5"/>
+        <path d="M9 12l2 2 4-4" stroke="#17a085" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3>Agendamento confirmado!</h3>
+      <p class="success-text">Você receberá confirmação por WhatsApp e e-mail.</p>
+      <button id="success-close" class="confirm-btn" type="button">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: LOGIN REQUIRED -->
+<div id="modal-login-required" class="modal-overlay" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true">
+    
+    <button type="button" class="modal-close" onclick="closeLoginRequiredModal()">✕</button>
+
+    <h3 class="modal-title">Você precisa entrar</h3>
+
+    <p style="text-align:center; margin: 12px 0 20px;">
+      Para continuar com o agendamento,<br>faça login na sua conta.
+    </p>
+
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <a href="{% url 'login' %}" class="confirm-btn" style="text-align:center;">
+        Fazer Login
+      </a>
+      <button type="button" class="confirm-btn" onclick="closeLoginRequiredModal()">
+        Fechar
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openLoginRequiredModal(){
+  const m = document.getElementById("modal-login-required");
+  if (!m) return;
+  m.style.display = "flex";
+  m.setAttribute("aria-hidden","false");
+  document.body.classList.add("modal-open");
+}
+
+function closeLoginRequiredModal(){
+  const m = document.getElementById("modal-login-required");
+  if (!m) return;
+  m.style.display = "none";
+  m.setAttribute("aria-hidden","true");
+  document.body.classList.remove("modal-open");
+}
+</script>

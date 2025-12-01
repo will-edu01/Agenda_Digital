@@ -1,10 +1,8 @@
 from django.urls import path
 from .views import (
     home,
-    select_datetime_view,
     get_available_times,
-    confirm_appointment_view,
-    save_appointment_view,
+    select_datetime_view,
     confirm_api,
     save_appointment_api,
 )
@@ -12,10 +10,8 @@ from .views import (
 
 urlpatterns = [
     path("", home, name="home"),
-    path("selecionar-horario/", select_datetime_view, name="select_datetime"),
     path('horarios/', get_available_times, name='available_times'),
-    path("confirmar/", confirm_appointment_view, name="confirm"),
-    path("salvar-agendamento/", save_appointment_view, name="save_appointment"),
+    path("selecionar-horario/", select_datetime_view, name="select_datetime"),
     path("api/confirm/", confirm_api, name="confirm_api"),
     path("api/save/", save_appointment_api, name="save_appointment_api"),
 ]

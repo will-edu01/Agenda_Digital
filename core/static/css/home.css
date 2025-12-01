@@ -1,264 +1,540 @@
-/* home.css — versão premium / moderna (isolada da base) */
-
-/* Reset mínimo */
-* { box-sizing: border-box; }
-html,body { height:100%; margin:0; padding:0; }
-
-/* Root */
-.home-root { font-family:"Poppins",sans-serif; color:#222; background:#fff; }
-
-/* --- HEADER (aparece apenas quando home preenche show_header) --- */
-.site-header {
-  background: #f8bfc5;
-  padding: 14px 0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  position: relative;
-  z-index: 2001;
-}
-.header-inner {
-  max-width:1200px;
-  margin:0 auto;
-  padding:0 20px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.logo a { text-decoration:none; color:#222; font-weight:700; font-size:20px; }
-.header-right { display:flex; align-items:center; gap:14px; }
-
-/* user */
-.user-menu-wrapper { position:relative; z-index: 9999; }
-.user-info { display:flex; align-items:center; gap:10px; cursor:pointer; padding:6px 10px; border-radius:18px; }
-.user-avatar { width:40px; height:40px; object-fit:cover; border-radius:50%; }
-.user-name { font-weight:600; color:#222; }
-
-/* dropdown */
-.user-dropdown {
-  position:absolute; top:58px; right:0; width:190px;
-  background:#fff; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  opacity:0; transform:translateY(-8px); pointer-events:none; transition:0.18s;
-  z-index:3000 !important;}
-.user-dropdown.show { opacity:1; transform:translateY(0); pointer-events:auto; }
-.dropdown-item { display:block; padding:10px 14px; color:#333; text-decoration:none; }
-.dropdown-item:hover { background:#fff0f6; }
-
-/* --- HERO (banner premium vertical) --- */
-
-.hero {
-  width: 100%;
-  padding: 40px 0 50px;
-  background: #ffffff;
-  display: flex;
-  justify-content: center;
+/* =========================================================
+   RESET
+========================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.hero-inner {
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 40px;
-  padding: 0 20px;
+body, html {
+    font-family: "Poppins", sans-serif;
+    background: #ffe3e8;
+    color: #303030;
 }
 
-/* --- TEXTO DO LADO ESQUERDO --- */
-.hero-left {
-  flex: 1.1;
-  z-index: 2;
+/* =========================================================
+   TOP BAR / HEADER
+========================================================= */
+.topbar {
+    background: #f7bfc7;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
 }
 
-.hero-title {
-  font-size: 42px;
-  margin: 0 0 12px;
-  font-weight: 800;
-  color: #222;
+.topbar-inner {
+    max-width: 1250px;
+    margin: auto;
+    padding: 0 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.hero-sub {
-  font-size: 17px;
-  color: #4b4b4b;
-  margin-bottom: 20px;
-}
-
-.btn-hero {
-  display: inline-block;
-  padding: 12px 26px;
-  background: #ff8bb9;
-  color: #fff;
-  border-radius: 28px;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 8px 22px rgba(255, 139, 185, 0.15);
-}
-
-/* --- FOTO DO LADO DIREITO --- */
-.hero-right {
-  flex: 1;
-  height: 440px;
-  max-width: 450px;
-  border-radius: 22px;
-  overflow: hidden;
-  position: relative;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-}
-
-/* AQUI ESTÁ O SEGREDO DO VISUAL PREMIUM */
-.hero-image {
-  width: 100%;
-  height: 100%;
-  
-  /* Recorte central + zoom elegante para foto vertical */
-  object-fit: cover;
-  object-position: center top;  /* IMPORTANTE p/ foto vertical */
-  
-  display: block;
-  transform: scale(1.12);        /* zoom elegante */
-  filter: contrast(1.03) saturate(1.05);
-}
-
-/* Overlay sutil rosado (igual modelo) */
-.hero-right::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(248,191,197,0.18),
-    rgba(255,255,255,0)
-  );
-  pointer-events: none;
-}
-
-/* Responsivo */
-@media (max-width: 900px) {
-  .hero-inner {
+/* LOGO */
+.logo-area {
+    display: flex;
     flex-direction: column;
-    text-align: center;
-  }
-  .hero-right {
-    width: 100%;
-    height: 320px;
-  }
-  .hero-image {
-    transform: scale(1.2);
-  }
+    line-height: 1.1;
 }
 
-/* -------------------------
-   SOBRE (rosa claro com foto da profissional)
-   ------------------------- */
+.logo-main {
+    font-size: 20px;
+    letter-spacing: 5px;
+}
+
+.logo-sub {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* USER MENU */
+.user-area {
+    position: relative;
+}
+
+.user-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    padding: 8px 14px;
+    background: #ffdce1;
+    border-radius: 20px;
+    transition: 0.2s;
+}
+
+.user-trigger:hover {
+    background: #ffcbd2;
+}
+
+.user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 55px;
+    right: 0;
+
+    background: white;
+    border-radius: 12px;
+    width: 190px;
+
+    padding-top: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+}
+
+.user-dropdown.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.user-dropdown .item {
+    display: block;
+    padding: 12px 14px;
+    color: #333;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.user-dropdown .item:hover {
+    background: #fff4f7;
+}
+
+/* =========================================================
+   INTRO TEXT
+========================================================= */
+.intro-box {
+    max-width: 1250px;
+    margin: 35px auto;
+    padding: 35px 30px;
+
+    background: #fff9f3;
+    border-left: 6px solid #f8bfc7;
+
+    border-radius: 8px;
+}
+
+.intro-text {
+    font-size: 17px;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   SOBRE A PROFISSIONAL
+========================================================= */
 .about-section {
-  max-width:1200px; margin:18px auto; padding:22px 20px; display:flex; gap:22px; align-items:center;
-  background:#fff0f4; border-radius:12px;
+    max-width: 1250px;
+    margin: 40px auto;
+    padding: 35px 30px;
+
+    background: #f8c5ce;
+    border-radius: 8px;
 }
-.about-text { flex:1; text-align:left; }
-.about-title { font-size:20px; margin:0 0 8px; color:#2b2b2b; font-weight:700; }
-.about-desc { color:#555; line-height:1.45; }
-.about-photo { width:180px; height:180px; border-radius:12px; overflow:hidden; flex-shrink:0; box-shadow:0 10px 24px rgba(0,0,0,0.06); }
-.about-photo img { width:100%; height:100%; object-fit:cover; display:block; }
 
+.about-title-box {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    gap: 12px;
+}
 
-/* --- AGENDAMENTO (minimalista sem card) --- */
-.agendamento-section { max-width:1200px; margin:28px auto 60px; padding:0 20px; }
-.section-title { font-size:24px; margin-bottom:6px; color:#222; font-weight:700; }
-.section-sub { color:#666; margin-bottom:18px; }
+.about-title-box .bar {
+    width: 40px;
+    height: 8px;
+    background: #ffdee6;
+    border-radius: 4px;
+}
 
-/* services form (rows) */
+.about-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.about-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.about-text {
+    width: 55%;
+    font-size: 15px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.social-links {
+    margin-top: 18px;
+    display: flex;
+    gap: 25px;
+    font-size: 15px;
+}
+
+.social-links a {
+    color: #333;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.social-links a:hover {
+    opacity: 0.7;
+}
+
+.about-photo {
+    width: 290px;
+    height: 290px;
+    overflow: hidden;
+}
+
+.about-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* =========================================================
+   AGENDAMENTO
+========================================================= */
+.agendamento-section {
+    max-width: 1250px;
+    margin: 40px auto;
+    padding: 50px 0;
+}
+
+.ag-title {
+    text-align: center;
+    font-size: 26px;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+.servicos-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    max-width: 900px;
+    margin: 0 auto 10px;
+}
+
+.servicos-header .bar {
+    width: 40px;
+    height: 8px;
+    background: #ffdee6;
+    border-radius: 4px;
+}
+
+.serv-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.serv-sub {
+    text-align: center;
+    color: #444;
+    font-size: 15px;
+    margin-bottom: 35px;
+}
+
+/* =======================
+   CARDS DE SERVIÇO
+======================= */
 .services-grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap:14px;
-  margin-bottom:18px;
+    display: flex;
+    justify-content: center;
+    gap: 55px;
+    margin-bottom: 35px;
+    flex-wrap: wrap;
 }
+
 .service-card {
-  display:flex; flex-direction:column; gap:8px; padding:14px; border-radius:12px; background:#fff; border:1px solid #f3dce6;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.04); cursor:pointer; transition:0.14s;
+    background: #ffe6ec;
+    padding: 15px;
+    width: 200px;
+
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-.service-card:hover { transform:translateY(-4px); box-shadow: 0 14px 36px rgba(0,0,0,0.06); }
-.service-row-checkbox { display:flex; align-items:center; gap:12px; }
-.service-row input[type="checkbox"] { transform:scale(1.15); margin-right:6px; }
-.service-info { flex:1; }
-.service-name { font-weight:700; color:#222; font-size:16px; }
-.service-desc { color:#666; font-size:13px; }
-.service-meta { display:flex; justify-content:space-between; align-items:center; margin-top:auto; color:#333; font-weight:600; }
 
-/* check style */
-.service-checkbox { width:18px; height:18px; }
-
-/* summary row */
-.summary-row { display:flex; gap:12px; align-items:center; justify-content:space-between; margin-top:14px; }
-.summary-text { font-weight:700; color:#222; }
-.summary-action { min-width:220px; }
-
-/* button principal */
-.btn-main {
-  display:inline-block; width:100%; padding:12px 18px; border-radius:26px;
-  background: linear-gradient(90deg,#ff90c0,#ff6aa5); color:#fff; border:none; font-weight:700; cursor:pointer;
-  transition:0.16s;
+.service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
 }
-.btn-main:disabled { opacity:0.6; pointer-events:none; transform:none; }
-.btn-main:not(:disabled):hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(255,106,165,0.16); }
 
-/* -------------------------
+.service-img {
+    width: 100%;
+    height: 120px;
+    border-radius: 10px;
+    object-fit: cover;
+    margin-bottom: 12px;
+}
+
+.service-name {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.service-meta {
+    text-align: center;
+    color: #333;
+    font-size: 14px;
+}
+
+.service-checkbox {
+    margin-top: 10px;
+    transform: scale(1.3);
+}
+
+/* =========================================================
+   BOTÃO CONFIRMAR
+========================================================= */
+.confirm-box {
+    text-align: center;
+}
+
+.confirm-btn {
+    background: #ffffff;
+    padding: 10px 25px;
+
+    border-radius: 6px;
+    border: 1px solid #aaa;
+
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+
+    transition: 0.2s;
+}
+
+.confirm-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.confirm-btn:not(:disabled):hover {
+    background: #ffe3eb;
+}
+
+/* =========================================================
    FOOTER
-   ------------------------- */
-.site-footer {
-  background:#f8bfc5; margin-top:40px; padding:18px 0; border-top:1px solid rgba(0,0,0,0.04);
+========================================================= */
+.main-footer {
+    margin-top: 50px;
+    background: #fff;
+    padding: 40px 0;
+    text-align: center;
+    color: #333;
 }
-.footer-inner { max-width:1200px; margin:0 auto; padding:0 20px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
-.footer-left { color:#222; font-weight:600; }
-.footer-right { color:#333; font-size:14px; }
 
-/* =========================
-   MODAL SELECT DATETIME
-   ========================= */
-.modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.55); display:none; align-items:center; justify-content:center; z-index:2000; }
-.modal-overlay.show { display:flex; }
-.modal-box { width:95%; max-width:520px; background:#fff; border-radius:16px; padding:24px; position:relative; }
-@keyframes modalFade { from{opacity:0; transform:translateY(-12px);} to{opacity:1; transform:translateY(0);} }
-.modal-close { position:absolute; right:14px; top:14px; background:none; border:none; font-size:20px; cursor:pointer; }
-.modal-title { text-align:center; font-size:22px; margin-bottom:6px; font-weight:700; }
-.modal-sub { text-align:center; margin-bottom:18px; color:#666; }
+.footer-info {
+    margin-bottom: 18px;
+    font-size: 15px;
+}
 
-.modal-field { margin-bottom:16px; }
-.modal-field label { display:block; margin-bottom:6px; font-weight:600; color:#444; }
 
-/* times grid */
+/* ===========================
+   ESTILIZAÇÃO DOS MODAIS
+   =========================== */
+
+/* Overlay escuro */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.55);
+    display: none; /* começa escondido */
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(3px); /* leve desfoque */
+    animation: fadeIn .25s ease;
+}
+
+/* Caixa branca dos modais */
+.modal-box {
+    background: #fff;
+    width: 92%;
+    max-width: 420px;
+    padding: 24px;
+    border-radius: 14px;
+    animation: popupSlide .25s ease;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-title {
+    margin-top: 0;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Botão fechar */
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Campo de data */
+.date-field {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Título de horários */
+.modal-times-wrapper h4 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+/* Grade de horários */
 .modal-times-grid {
-  margin-top:10px; max-height:220px; overflow-y:auto;
-  display:grid; grid-template-columns: repeat(auto-fill, minmax(90px,1fr)); gap:10px; padding-right:6px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 8px 2px;
+    scroll-behavior: smooth;
 }
-.modal-times-grid::-webkit-scrollbar { width:6px; }
-.modal-times-grid::-webkit-scrollbar-thumb { background:#ffb5d5; border-radius:4px; }
 
+.modal-times-grid::-webkit-scrollbar {
+    height: 6px;
+}
+.modal-times-grid::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+/* Cada botão de horário */
 .time-btn {
-  padding:10px 2px; border-radius:8px; text-align:center; background:#ffe7f2; border:1px solid #ffcfe4;
-  cursor:pointer; transition:0.14s;
+    padding: 10px 14px;
+    white-space: nowrap;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    cursor: pointer;
+    background: #fff;
+    transition: .2s ease;
 }
-.time-btn:hover { background:#ffd7e9; }
-.time-btn.selected { background:#ff8bb9; color:white; font-weight:bold; border-color:#ff6ca6; }
 
-/* =========================
-   MODAL CONFIRM
-   ========================= */
-.modal-confirm-list { margin:12px 0 6px; padding:0; list-style:none; max-height:220px; overflow:auto; }
-.modal-confirm-item { display:flex; justify-content:space-between; padding:8px 6px; border-bottom:1px solid #f5e8ef; }
-.modal-confirm-item .name { font-weight:600; }
-.modal-confirm-footer { margin-top:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.time-btn:hover {
+    background: #eee;
+}
 
-/* =========================
-   MODAL SUCCESS
-   ========================= */
-.modal-success { text-align:center; padding:8px 14px; }
-.modal-success h3 { margin-top:8px; color:#333; }
-.modal-success p { color:#555; }
+.time-btn.selected {
+    background: #0ca678;
+    color: #fff;
+    border-color: #0ca678;
+}
 
-/* responsiveness */
-@media (max-width:900px) {
-  .about-section { flex-direction:column; gap:14px; text-align:center; }
-  .about-photo { margin:0 auto; }
-  .service-meta { min-width:80px; text-align:right; }
-  .services-grid { grid-template-columns: 1fr; }
-  .summary-row { flex-direction:column; align-items:stretch; }
-  .summary-action { width:100%; }
+/* Botão confirmar dentro do modal */
+#modal-choose-time {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#modal-choose-time:disabled {
+    opacity: 0.5;
+}
+
+/* Modal de sucesso */
+#modal-success .modal-box {
+    max-width: 360px;
+    text-align: center;
+}
+
+.modal-success h3 {
+    margin-top: 12px;
+    font-size: 22px;
+    color: #0ca678;
+}
+
+.success-text {
+    margin: 8px 0 18px;
+    color: #333;
+}
+
+/* Animações */
+@keyframes popupSlide {
+    from { transform: translateY(18px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Classe que ativa o modal */
+.show {
+    display: flex !important;
+}
+
+
+/* ===========================
+   MODAL DE RESUMO
+   =========================== */
+
+#modal-summary .modal-box {
+    max-width: 420px;
+}
+
+.summary-content p {
+    margin: 6px 0;
+    font-size: 15px;
+}
+
+.summary-content ul {
+    margin: 8px 0 12px;
+    padding-left: 18px;
+}
+
+.summary-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+}
+
+.summary-actions .confirm-btn {
+    width: 48%;
+    padding: 12px;
+}
+
+body.modal-open {
+    overflow: hidden;
 }

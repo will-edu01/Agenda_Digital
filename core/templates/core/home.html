@@ -6,334 +6,423 @@
 {% endblock %}
 
 {% block show_header %}
-<header class="site-header">
-  <div class="header-inner">
-    <div class="logo"><a href="{% url 'home' %}">Espaço <strong>Ana Valente</strong></a></div>
-    <nav class="header-right">
-      <div class="user-menu-wrapper">
-        <div id="user-trigger" class="user-info">
-            <span class="user-name">
-                {% if request.user.is_authenticated %}
-                    {{ request.user.first_name|default:request.user.email|cut:"@gmail.com" }}
-                {% else %}
-                    Usuário
-                {% endif %}
-            </span>
-            <img src="{% static 'img/user-placeholder.png' %}" class="user-avatar" alt="Usuário">
-        </div>
-        <div id="user-dropdown" class="user-dropdown">
-            <a href="#" class="dropdown-item">👤 Perfil</a>
-            <a href="#" class="dropdown-item">📅 Minha Agenda</a>
-            {% if request.user.is_authenticated %}
-              <a href="{% url 'logout' %}" class="dropdown-item">↩️ Sair</a>
-            {% else %}
-              <a href="{% url 'login' %}" class="dropdown-item">🔐 Entrar</a>
-            {% endif %}
-        </div>
+<header class="topbar">
+  <div class="topbar-inner">
+
+
+    <div class="logo-area">
+      <span class="logo-main">Espaço</span>
+      <span class="logo-sub">Ana Valente</span>
+    </div>
+
+
+    <div class="user-area">
+      <div id="user-trigger" class="user-trigger" aria-haspopup="true" aria-expanded="false">
+        <span class="user-label">
+
+          {% if request.user.is_authenticated %}
+            {{ request.user.name|default:request.user.email }}
+          {% else %}
+            Usuário
+          {% endif %}
+
+        </span>
+        <img src="{% static 'img/user-placeholder.png' %}" class="user-avatar" alt="Usuário">
       </div>
-    </nav>
+
+      <div id="user-dropdown" class="user-dropdown" role="menu" aria-hidden="true">
+        <a class="item" href="#">👤 Perfil</a>
+        <a class="item" href="#">📅 Minha Agenda</a>
+        {% if request.user.is_authenticated %}
+          <a class="item" href="{% url 'logout' %}">↩️ Sair</a>
+        {% else %}
+          <a class="item" href="{% url 'login' %}">🔐 Entrar</a>
+        {% endif %}
+      </div>
+
+    </div>
   </div>
 </header>
 {% endblock %}
 
 {% block content %}
-<main class="home-root">
 
-  <!-- HERO / BANNER -->
-  <section class="hero" aria-hidden="false">
-    <div class="hero-inner">
-      <div class="hero-left">
-        <h1 class="hero-title">Espaço Ana Valente</h1>
-        <p class="hero-sub">Em nosso espaço a beleza encontra seu lugar. Profissionalismo, carinho e resultados — agende com praticidade.</p>
-        <a href="#agendamento" class="btn-hero">Agendar agora</a>
-      </div>
-      <div class="hero-right" aria-hidden="true">
-        <img src="{% static 'img/salao.jpeg' %}" alt="Banner do salão" class="hero-image">
-        <div class="hero-overlay"></div>
-      </div>
+<script>
+    window.userIsAuthenticated = ( "{{ request.user.is_authenticated }}" === "True" );
+</script>
+
+<main class = "home-root">
+
+  <section class="intro-box" aria-label="Introdução">
+    <div class="intro-text">
+        Em nosso espaço a beleza encontra seu lugar, em um <br>
+        ambiente acolhedor que realça o que há de mais belo <br>
+        em cada pessoa.
     </div>
   </section>
 
-  <!-- SOBRE O SALÃO (rosa claro com foto) -->
-  <section class="about-section" aria-label="Sobre o salão">
-    <div class="about-text">
-      <h3 class="about-title">Sobre o Espaço</h3>
-      <p class="about-desc">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer a arcu ut nisl laoreet faucibus.
-        Mauris viverra, felis eu laoreet iaculis, nibh ipsum cursus nunc, a lobortis justo neque quis nunc.
-      </p>
-      <p class="about-desc" style="margin-top:10px; font-weight:600;">Atendimentos por agendamento — conforto e acolhimento.</p>
+  <section class="about-section" aria-label="Sobre">
+
+    <div class="about-title-box">
+      <span class="bar"></span>
+      <h2 class="about-title">Sobre Nossa Profissional</h2>
     </div>
-    <div class="about-photo">
-      <img src="{% static 'img/profile.png' %}" alt="Profissional">
+
+    <div class="about-content">
+
+      <div class="about-text">
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy
+          text ever since the 1500s, when an unknown printer took a galley
+          of type and scrambled it to make a type specimen book.
+        </p>
+
+        <p>
+          It has survived not only five centuries, but also the leap into
+          electronic typesetting, remaining essentially unchanged. It was
+          popularised in the 1960s with the release of Letraset sheets
+          containing Lorem Ipsum passages, and more recently with desktop
+          publishing software like Aldus PageMaker including versions of
+          Lorem Ipsum.
+        </p>
+
+        <div class="social-links">
+          <a href="https://instagram.com" target="_blank" rel="noopener">📸 Instagram</a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener">💼 LinkedIn</a>
+        </div>
+      </div>
+
+      <div class="about-photo">
+        <img src="{% static 'img/profile.png' %}" alt="Profissional">
+      </div>
+
     </div>
   </section>
 
-  <!-- AGENDAMENTO E SERVIÇOS -->
-  <section id="agendamento" class="agendamento-section">
-    <h2 class="section-title">Agendamento</h2>
-    <p class="section-sub">Escolha um ou mais serviços e selecione data e horário — tudo sem sair da página.</p>
+  <section id="agendamento" class="agendamento-section" aria-label="Agendamento">
 
-    <form id="services-form" class="services-form">
+    <h2 class="ag-title">Agendamento</h2>
+    
+    <div class="about-section">
+    <div class="servicos-header">
+        <span class="bar"></span>
+        <h3 class="serv-title">Serviços</h3>
+    </div>
+    
+    <p class="serv-sub">Escolha um ou mais serviços — depois selecione data e horário.</p>
+
+    <form id="services-form">
       {% csrf_token %}
-      <div class="services-grid">
-        {% for s in services %}
-        <label class="service-card">
-          <div class="service-row-checkbox">
-            <input class="service-checkbox" type="checkbox" name="services" value="{{ s.id }}">
-            <div class="service-info">
-              <div class="service-name">{{ s.name }}</div>
-              <div class="service-desc">{{ s.description|truncatechars:80 }}</div>
-            </div>
-          </div>
-          <div class="service-meta">
-            <div>R$ {{ s.price }}</div>
-            <div style="font-size:13px;color:#666;">{{ s.duration_minutes }} min</div>
-          </div>
-        </label>
-        {% endfor %}
+      <div class="services-grid" role="list">
+          {% for s in services %}
+          <label class="service-card" role="listitem">
+            <div class="service-name">{{ s.name }}</div>
+            <div class="service-meta">R$ {{ s.price }} | {{ s.duration_minutes }} min</div>
+            <input class="service-checkbox" type="checkbox" name="services" value="{{ s.id }}" aria-label="Selecionar {{ s.name }}">
+          </label>
+          {% endfor %}
       </div>
 
-      <div class="summary-row">
-        <div class="summary-text">Tempo: <strong id="total-duration">0</strong> min — Valor: <strong id="total-price">0.00</strong></div>
-        <div class="summary-action"><button id="continue-btn" class="btn-main" type="button" disabled>Continuar</button></div>
+      <div class="confirm-box">
+        <div style="margin-bottom:12px;">
+          Tempo total: <strong id="total-duration">0</strong> min — Valor: R$ <strong id="total-price">0.00</strong>
+        </div>
+
+        <button id="continue-btn" class="confirm-btn" type="button" disabled>Continuar</button>
       </div>
     </form>
+
+    </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-inner">
-      <div class="footer-left">© {{ now.year }} Espaço Ana Valente</div>
-      <div class="footer-right">Contato: contato@espacoana.com • WhatsApp: (00) 90000-0000</div>
-    </div>
+  {% include 'core/partials/modals.html' %}
+
+  <footer class="main-footer" role="contentinfo">
+      <div class="footer-info">
+          Equipe <br>
+          E-mail | example@gmail.com <br>
+          Whatsapp | 12345678910
+      </div>
   </footer>
-
-  <!-- MODAL: SELECT DATETIME -->
-  <div id="modal-select-datetime" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true">
-      <button class="modal-close" onclick="closeSelectDatetimeModal()">✕</button>
-      <h2 class="modal-title">Selecione Data e Horário</h2>
-      <div class="modal-field">
-        <label for="modal-date">Data</label>
-        <input type="date" id="modal-date" class="date-field">
-      </div>
-      <div class="modal-times-wrapper">
-        <h3>Horários disponíveis</h3>
-        <div id="modal-times" class="modal-times-grid">
-          <p style="grid-column:1/-1;color:#666;text-align:center">Selecione uma data</p>
-        </div>
-      </div>
-
-      <div style="margin-top:14px;">
-        <button id="modal-select-next" class="btn-main" disabled>Continuar</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: CONFIRM -->
-  <div id="modal-confirm" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box" role="dialog" aria-modal="true">
-      <button class="modal-close" onclick="closeConfirmModal()">✕</button>
-      <h2 class="modal-title">Confirme seu agendamento</h2>
-      <p id="confirm-sub" class="modal-sub"></p>
-      <ul id="confirm-services" class="modal-confirm-list"></ul>
-      <div class="modal-confirm-footer">
-        <div>
-          <div><strong>Tempo:</strong> <span id="confirm-total-min">0</span> min</div>
-          <div><strong>Valor:</strong> R$ <span id="confirm-total-price">0.00</span></div>
-        </div>
-        <div style="min-width:160px;">
-          <button id="confirm-final-btn" class="btn-main">Confirmar agendamento</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: SUCCESS -->
-  <div id="modal-success" class="modal-overlay" aria-hidden="true">
-    <div class="modal-box">
-      <div class="modal-success">
-        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" style="display:block;margin:0 auto">
-          <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" fill="#eaf7f5"/>
-          <path d="M9 12l2 2 4-4" stroke="#17a085" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <h3>Agendamento confirmado!</h3>
-        <p class="success-text">Aguarde a confirmação via WhatsApp e e-mail.</p>
-        <button class="btn-main" onclick="closeSuccessModal()">Fechar</button>
-      </div>
-    </div>
-  </div>
-
 </main>
 
-<!-- --------- SCRIPTS --------- -->
 <script>
+(function(){
+  // helper safe-get
+  const $ = id => document.getElementById(id);
+  const q = sel => document.querySelector(sel);
+  const qa = sel => Array.from(document.querySelectorAll(sel));
 
-const IS_LOGGED = Boolean(Number("{{ request.user.is_authenticated|yesno:'1,0' }}"));
-
-/* CSRF helper */
-function getCookie(name){ const v = document.cookie.match('(^|;)\\s*'+name+'\\s*=\\s*([^;]+)'); return v ? v.pop() : ''; }
-const csrftoken = getCookie('csrftoken');
-
-/* Menu user */
-document.addEventListener("DOMContentLoaded", function(){
-  const trigger = document.getElementById("user-trigger");
-  const dropdown = document.getElementById("user-dropdown");
-  if (!trigger || !dropdown) return;
-  trigger.addEventListener("click", function(e){ e.stopPropagation(); dropdown.classList.toggle("show"); });
-  document.addEventListener("click", function(e){ if (!trigger.contains(e.target) && !dropdown.contains(e.target)) dropdown.classList.remove("show"); });
-});
-
-/* Summary */
-function parsePrice(text){ if(!text) return 0; text = text.replace('R$', '').replace(/\s/g,'').replace(',', '.'); const v = parseFloat(text); return isNaN(v) ? 0 : v; }
-function parseMinutes(text){ if(!text) return 0; const m = text.replace('min','').trim(); const v = parseInt(m); return isNaN(v) ? 0 : v; }
-function updateSummary(){
-  let price=0, minutes=0;
-  document.querySelectorAll(".service-checkbox").forEach(cb=>{
-    if(cb.checked){
-      const row = cb.closest(".service-card");
-      price += parsePrice(row.querySelector(".service-meta div").textContent);
-      minutes += parseMinutes(row.querySelector(".service-meta div:nth-child(2)").textContent);
-    }
-  });
-  document.getElementById("total-duration").textContent = minutes;
-  document.getElementById("total-price").textContent = price.toFixed(2);
-  document.getElementById("continue-btn").disabled = minutes === 0;
-}
-document.addEventListener("DOMContentLoaded", function(){ document.querySelectorAll(".service-checkbox").forEach(cb=>cb.addEventListener("change", updateSummary)); });
-
-/* MODAL SELECT DATETIME */
-function openSelectDatetimeModal(){ document.getElementById("modal-select-datetime").classList.add("show"); document.getElementById("modal-date").value=''; document.getElementById("modal-times").innerHTML='<p style="grid-column:1/-1;color:#666;text-align:center">Selecione uma data</p>'; document.getElementById("modal-select-next").disabled=true; }
-function closeSelectDatetimeModal(){ document.getElementById("modal-select-datetime").classList.remove("show"); }
-
-/* abrir modal ao clicar continuar */
-document.getElementById("continue-btn").addEventListener("click", function(){
-  if (!IS_LOGGED) {
-    alert("Por favor, faça login para continuar com o agendamento.");
-    window.location.href = "{% url 'login' %}";
-    return;
+  // get csrftoken from cookie
+  function getCookie(name){
+    const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return m ? m.pop() : '';
   }
-  const selected = Array.from(document.querySelectorAll(".service-checkbox:checked")).map(i=>i.value);
-  if (!selected.length) return alert("Selecione pelo menos um serviço.");
-  openSelectDatetimeModal();
-});
+  const csrftoken = getCookie('csrftoken');
 
-/* buscar horários */
-document.getElementById("modal-date").addEventListener("change", async function(){
-  const date = this.value;
-  const timesWrapper = document.getElementById("modal-times");
-  const totalMinutes = parseInt(document.getElementById("total-duration").textContent) || 0;
-  timesWrapper.innerHTML = ''; document.getElementById("modal-select-next").disabled=true;
-  if(!date) return;
-  try {
-    const res = await fetch(`/horarios/?date=${date}&duration=${totalMinutes}`);
-    const data = await res.json();
-    if(!data.slots || !data.slots.length){
-      timesWrapper.innerHTML = "<p style='grid-column:1/-1;color:#666;text-align:center'>Nenhum horário disponível nesta data.</p>";
-      return;
-    }
-    data.slots.forEach(time=>{
-      const btn = document.createElement("div");
-      btn.className = "time-btn";
-      btn.textContent = time;
-      btn.addEventListener("click", function(){
-        document.querySelectorAll("#modal-times .time-btn").forEach(e=>e.classList.remove("selected"));
-        btn.classList.add("selected");
-        document.getElementById("modal-select-next").dataset.time = time;
-        document.getElementById("modal-select-next").dataset.date = date;
-        document.getElementById("modal-select-next").disabled = false;
-      });
-      timesWrapper.appendChild(btn);
+  // elements
+  const checkboxes = qa('.service-checkbox');
+  const totalDurationEl = $('total-duration');
+  const totalPriceEl = $('total-price');
+  const continueBtn = $('continue-btn');
+
+  // modals
+  const modalSelect = $('modal-select-datetime');
+  const modalTimes = $('modal-times');
+  const modalDate = $('modal-date');
+  const modalSelectNext = $('modal-select-next');
+
+  const modalSummary = $('modal-summary');
+  const summaryServices = $('summary-services');
+  const summaryTime = $('summary-time');
+  const summaryPrice = $('summary-price');
+  const summaryDate = $('summary-date');
+  const summaryHour = $('summary-hour');
+  const summaryBack = $('summary-back');
+  const summaryConfirm = $('summary-confirm');
+
+  const modalSuccess = $('modal-success');
+  const successClose = $('success-close');
+
+  // parse helpers
+  function parsePrice(txt){
+    if (!txt) return 0;
+    return parseFloat(txt.replace('R$','').replace(/\s/g,'').replace(',','.')) || 0;
+  }
+  function parseMinutes(txt){
+    if (!txt) return 0;
+    const n = txt.replace(/[^0-9]/g,'');
+    return parseInt(n) || 0;
+  }
+
+  // update summary totals
+  function updateSummary(){
+    let minutes = 0, price = 0;
+    qa('.service-checkbox').forEach(cb=>{
+      if (cb.checked){
+        const card = cb.closest('.service-card');
+        const meta = (card && card.querySelector('.service-meta')) ? card.querySelector('.service-meta').textContent : '';
+        const pricePart = (meta.split('|')[0] || meta).trim();
+        const minsPart = (meta.split('|')[1] || '').trim();
+        price += parsePrice(pricePart);
+        minutes += parseMinutes(minsPart);
+      }
     });
-  } catch (err) {
-    timesWrapper.innerHTML = "<p style='grid-column:1/-1;color:#c33;text-align:center'>Erro ao buscar horários.</p>";
-    console.error(err);
+    if (totalDurationEl) totalDurationEl.textContent = minutes;
+    if (totalPriceEl) totalPriceEl.textContent = price.toFixed(2);
+    if (continueBtn) continueBtn.disabled = (minutes === 0);
   }
-});
 
-/* chamar confirm_api (opção C) */
-document.getElementById("modal-select-next").addEventListener("click", async function(){
-  const btn = this;
-  const services = Array.from(document.querySelectorAll(".service-checkbox:checked")).map(i=>i.value);
-  const selected_date = btn.dataset.date;
-  const selected_time = btn.dataset.time;
-  if(!services.length || !selected_date || !selected_time) return alert("Dados incompletos.");
-  const form = new FormData();
-  services.forEach(id=>form.append("services[]", id));
-  form.append("selected_date", selected_date);
-  form.append("selected_time", selected_time);
-  try {
-    const res = await fetch("{% url 'confirm_api' %}", { method:"POST", body: form, headers: {"X-CSRFToken": csrftoken} });
-    const data = await res.json();
-    if(!data.ok){ alert(data.error || "Erro ao montar confirmação."); return; }
-    fillConfirmModal(data);
-    closeSelectDatetimeModal();
-    openConfirmModal();
-  } catch(err){ console.error(err); alert("Erro ao confirmar. Tente novamente."); }
-});
+  // open / close helpers (centralized)
+  function openModal(modal){
+    if (!modal) return;
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('modal-open');
+  }
+  function closeModal(modal){
+    if (!modal) return;
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+    // remove modal-open if none visible
+    if (!document.querySelector('.modal-overlay.show')) document.body.classList.remove('modal-open');
+  }
 
-/* MODAL CONFIRM */
-function openConfirmModal(){ document.getElementById("modal-confirm").classList.add("show"); }
-function closeConfirmModal(){ document.getElementById("modal-confirm").classList.remove("show"); }
+  window.openLoginRequiredModal = function() {
+    const m = document.getElementById("modal-login-required");
+    openModal(m);
+  };
 
-function fillConfirmModal(data){
-  const list = document.getElementById("confirm-services");
-  list.innerHTML = "";
-  data.services.forEach(s=>{
-    const li = document.createElement("li");
-    li.className = "modal-confirm-item";
-    li.innerHTML = `<div class="name">${s.name} <small style="display:block;color:#666">${s.duration} min</small></div><div class="price">R$ ${parseFloat(s.price).toFixed(2)}</div>`;
-    list.appendChild(li);
-  });
-  document.getElementById("confirm-total-min").textContent = data.total_minutes;
-  document.getElementById("confirm-total-price").textContent = parseFloat(data.total_price).toFixed(2);
-  document.getElementById("confirm-sub").textContent = `${data.selected_date} — ${data.selected_time}`;
-  window.__appointment_payload = { service_ids: data._service_ids || [], selected_date: data.selected_date, selected_time: data.selected_time };
-}
+  window.closeLoginRequiredModal = function() {
+    const m = document.getElementById("modal-login-required");
+    closeModal(m);
+  };
 
-/* confirmar final (save via AJAX) */
-document.getElementById("confirm-final-btn").addEventListener("click", async function(){
-  const ids = Array.from(document.querySelectorAll(".service-checkbox:checked")).map(i=>i.value);
-  const form = new FormData();
-  ids.forEach(id=>form.append("services[]", id));
-  form.append("selected_date", window.__appointment_payload.selected_date);
-  form.append("selected_time", window.__appointment_payload.selected_time);
-  try {
-    const res = await fetch("{% url 'save_appointment_api' %}", { method:"POST", body: form, headers: {"X-CSRFToken": csrftoken} });
-    const result = await res.json();
-    if(!result.ok){ alert(result.error || "Erro ao salvar agendamento."); return; }
-    closeConfirmModal();
-    openSuccessModal();
-  } catch(err){ console.error(err); alert("Erro ao salvar. Tente novamente."); }
-});
+  // attach change listeners to checkboxes
+  qa('.service-checkbox').forEach(cb => cb.addEventListener('change', updateSummary));
+  updateSummary();
 
-/* MODAL SUCCESS */
-function openSuccessModal(){ document.getElementById("modal-success").classList.add("show"); }
-function closeSuccessModal(){ document.getElementById("modal-success").classList.remove("show"); }
+  // open select datetime modal when clicking continue
+  if (continueBtn) {
+    continueBtn.addEventListener('click', function(){
+      if (continueBtn.disabled) return;
 
-document.addEventListener("DOMContentLoaded", function() {
-    const trigger = document.querySelector("#user-trigger");
-    const dropdown = document.querySelector("#user-dropdown");
-
-    if (!trigger || !dropdown) {
-        console.warn("Menu do usuário não encontrado no DOM.");
+      if (!window.userIsAuthenticated) {
+        openLoginRequiredModal();
         return;
-    }
+      }
 
-    // Abre/fecha ao clicar
-    trigger.onclick = function(e) {
-        e.stopPropagation();
-        dropdown.classList.toggle("show");
-    };
-
-    // Fecha ao clicar fora
-    document.addEventListener("click", function(e) {
-        if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
-            dropdown.classList.remove("show");
-        }
+      if (modalDate) modalDate.value = '';
+      if (modalTimes) modalTimes.innerHTML = '<p style="grid-column:1/-1;color:#666;text-align:center">Selecione uma data</p>';
+      if (modalSelectNext) modalSelectNext.disabled = true;
+      openModal(modalSelect);
     });
-});
+  }
 
+  // close buttons (any modal: button with data-action="close-modal" or .modal-close)
+  document.addEventListener('click', function(e){
+    // close icon
+    if (e.target.closest('[data-action="close-modal"]') || e.target.classList.contains('modal-close')) {
+      const modal = e.target.closest('.modal-overlay');
+      if (modal) closeModal(modal);
+    }
+    // click outside modal-box closes modal
+    if (e.target.classList && e.target.classList.contains('modal-overlay')) {
+      closeModal(e.target);
+    }
+  });
+
+  // USER dropdown is still handled by base.html script; nothing further here
+
+  // when date changes, fetch available times
+  if (modalDate && modalTimes && modalSelectNext) {
+    modalDate.addEventListener('change', async function(){
+      const date = this.value;
+      modalTimes.innerHTML = '';
+      modalSelectNext.disabled = true;
+
+      if (!date) {
+        modalTimes.innerHTML = '<p style="grid-column:1/-1;color:#666;text-align:center">Selecione uma data</p>';
+        return;
+      }
+
+      const duration = parseInt((totalDurationEl && totalDurationEl.textContent) || '0', 10) || 0;
+      const url = "{% url 'available_times' %}?date=" + encodeURIComponent(date) + "&duration=" + encodeURIComponent(duration);
+
+      try {
+        const res = await fetch(url, { credentials: 'same-origin' });
+        if (!res.ok) throw new Error('Erro ao buscar horários');
+        const data = await res.json();
+        const slots = data.slots || [];
+        if (!slots.length) {
+          modalTimes.innerHTML = "<p style='grid-column:1/-1;color:#666;text-align:center'>Nenhum horário disponível.</p>";
+          return;
+        }
+
+        // render horizontal row with buttons
+        modalTimes.innerHTML = '';
+        slots.forEach(t => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.className = 'time-btn';
+          b.textContent = t;
+          b.addEventListener('click', function(){
+            modalTimes.querySelectorAll('.time-btn').forEach(x => x.classList.remove('selected'));
+            b.classList.add('selected');
+            modalSelectNext.dataset.date = date;
+            modalSelectNext.dataset.time = t;
+            modalSelectNext.disabled = false;
+          });
+          modalTimes.appendChild(b);
+        });
+      } catch(err) {
+        console.error(err);
+        modalTimes.innerHTML = "<p style='grid-column:1/-1;color:#c33;text-align:center'>Erro ao carregar horários.</p>";
+      }
+    });
+  }
+
+  // when user clicks "Selecionar horário e confirmar" -> call confirm_api to prepare summary
+  if (modalSelectNext) {
+    modalSelectNext.addEventListener('click', async function(){
+      const date = modalSelectNext.dataset.date;
+      const time = modalSelectNext.dataset.time;
+      const selected = qa('input[name="services"]:checked');
+      if (!selected.length) { showToast('Selecione pelo menos um serviço', 'error'); return; }
+      const ids = selected.map(cb => cb.value);
+
+      // build formdata
+      const fd = new FormData();
+      ids.forEach(id => fd.append('services[]', id));
+      fd.append('selected_date', date);
+      fd.append('selected_time', time);
+
+      try {
+        const res = await fetch("{% url 'confirm_api' %}", {
+          method: 'POST',
+          body: fd,
+          headers: { 'X-CSRFToken': csrftoken },
+          credentials: 'same-origin'
+        });
+        const data = await res.json();
+        if (!data.ok) {
+          showToast(data.error || 'Erro ao validar seleção', 'error');
+          return;
+        }
+
+        // fill summary modal
+        summaryServices.innerHTML = '';
+        (data.services || []).forEach(s => {
+          const li = document.createElement('li');
+          li.textContent = `${s.name} — ${s.duration} min — R$ ${parseFloat(s.price).toFixed(2)}`;
+          summaryServices.appendChild(li);
+        });
+        summaryTime.textContent = data.total_minutes;
+        summaryPrice.textContent = parseFloat(data.total_price).toFixed(2);
+        summaryDate.textContent = data.selected_date;
+        summaryHour.textContent = data.selected_time;
+
+        // close times modal and open summary
+        closeModal(modalSelect);
+        openModal(modalSummary);
+
+      } catch(err) {
+        console.error(err);
+        showToast('Erro ao validar dados', 'error');
+      }
+    });
+  }
+
+  // summary back
+  if (summaryBack) {
+    summaryBack.addEventListener('click', function(){
+      closeModal(modalSummary);
+      openModal(modalSelect);
+    });
+  }
+
+  // summary confirm -> save_appointment_api
+  if (summaryConfirm) {
+    summaryConfirm.addEventListener('click', async function(){
+      const selected = qa('input[name="services"]:checked');
+      if (!selected.length) { showToast('Selecione serviços', 'error'); return; }
+      const ids = selected.map(cb => cb.value);
+
+      const fd = new FormData();
+      ids.forEach(id => fd.append('services[]', id));
+      fd.append('selected_date', summaryDate.textContent);
+      fd.append('selected_time', summaryHour.textContent);
+
+      try {
+        const res = await fetch("{% url 'save_appointment_api' %}", {
+          method: 'POST',
+          body: fd,
+          headers: { 'X-CSRFToken': csrftoken },
+          credentials: 'same-origin'
+        });
+        const data = await res.json();
+        if (!data.ok) {
+          showToast(data.error || 'Erro ao salvar agendamento', 'error');
+          return;
+        }
+        closeModal(modalSummary);
+        openModal(modalSuccess);
+      } catch(err) {
+        console.error(err);
+        showToast('Erro ao salvar agendamento', 'error');
+      }
+    });
+  }
+
+  // success close
+  if (successClose) {
+    successClose.addEventListener('click', function(){
+      closeModal(modalSuccess);
+    });
+  }
+
+})();
 </script>
+
 {% endblock %}

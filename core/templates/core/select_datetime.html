@@ -1,114 +1,121 @@
 {% extends "core/base.html" %}
 {% load static %}
 
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/select.css' %}">
+{% endblock %}
+
 {% block content %}
+<main class="select-root">
 
-<div class="page-wrapper">
+    <h2 class="select-title">Escolha a data e horário</h2>
 
-    <h2 class="section-title">Escolha a data</h2>
-    <p class="section-sub">Revise e escolha um horário disponível</p>
+    <section class="select-summary">
+        <h3>Resumo dos Serviços</h3>
 
-    <div class="section-block">
-        <h4>Serviços selecionados</h4>
-        <ul>
+        <ul class="service-list">
             {% for s in services %}
-            <li>{{ s.name }} — R$ {{ s.price }} — {{ s.duration_minutes }} min</li>
+            <li>{{ s.name }} — {{ s.duration_minutes }} min — R$ {{ s.price }}</li>
             {% endfor %}
         </ul>
 
-        <p><strong>Tempo total:</strong> {{ total_minutes }} min</p>
-        <p><strong>Preço total:</strong> R$ {{ total_price }}</p>
-    </div>
-
-    <div class="section-block">
-        <label>Selecione uma data:</label><br>
-        <input type="date" id="date-input" class="date-field">
-    </div>
-
-    <div class="section-block">
-        <h4>Horários disponíveis</h4>
-        <div id="times-container">
-            <p>Selecione uma data acima</p>
+        <div class="summary-totals">
+            <p>Duração total: <strong>{{ total_minutes }} min</strong></p>
+            <p>Valor total: <strong>R$ {{ total_price }}</strong></p>
         </div>
-    </div>
+    </section>
 
-    <form method="post" id="confirm-form" action="{% url 'confirm' %}" style="text-align:center;">
-        {% csrf_token %}
-        <input type="hidden" name="selected_time" id="selected-time">
-        <input type="hidden" name="selected_date" id="selected-date">
+    <section class="select-form">
 
-        {% for id in service_ids %}
-        <input type="hidden" name="services" value="{{ id }}">
-        {% endfor %}
+        <div class="date-box">
+            <label>Selecione a data:</label>
+            <input type="date" id="selected-date" min="{{ today|default:'' }}">
+        </div>
 
-        <button type="submit" id="continue-btn" class="btn-primary" disabled>Continuar</button>
-    </form>
+        <div id="time-selector" class="time-selector hidden">
+            <h3>Horários Disponíveis</h3>
+            <div id="time-slots" class="slots-grid">
+                <!-- horários serão carregados via JS -->
+            </div>
+        </div>
 
-</div>
+        <!-- FORM A SER ENVIADO PARA A CONFIRMAÇÃO -->
+        <form id="final-form" method="post" action="{% url 'confirm' %}">
+            {% csrf_token %}
+            
+            {% for sid in selected_services %}
+            <input type="hidden" name="services" value="{{ sid }}">
+            {% endfor %}
 
+            <input type="hidden" id="final-date" name="selected_date">
+            <input type="hidden" id="final-time" name="selected_time">
+
+            <button id="confirm-btn" class="confirm-btn" type="submit" disabled>
+                Continuar
+            </button>
+        </form>
+
+    </section>
+
+</main>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const dateInput = document.getElementById("date-input");
-    const timesContainer = document.getElementById("times-container");
-    const continueBtn = document.getElementById("continue-btn");
+document.addEventListener("DOMContentLoaded", function () {
 
-    const selectedTimeInput = document.getElementById("selected-time");
-    const selectedDateInput = document.getElementById("selected-date");
+    const dateInput = document.getElementById("selected-date");
+    const timeSelector = document.getElementById("time-selector");
+    const slotsDiv = document.getElementById("time-slots");
 
-    const duration = Number("{{ total_minutes|default:0 }}");
+    const finalDate = document.getElementById("final-date");
+    const finalTime = document.getElementById("final-time");
+    const confirmBtn = document.getElementById("confirm-btn");
 
-    dateInput.addEventListener("change", () => {
+    // Quando o usuário escolhe uma data, buscar horários
+    dateInput.addEventListener("change", async function () {
         const date = dateInput.value;
-        selectedDateInput.value = date;
+        finalDate.value = date;
+        confirmBtn.disabled = true;
 
-        if (!date) {
-            timesContainer.innerHTML = "<p>Selecione uma data acima</p>";
-            continueBtn.disabled = true;
-            return;
-        }
+        if (!date) return;
 
-        fetch(`/horarios/?date=${date}&duration=${duration}`)
-            .then(res => res.json())
-            .then(data => {
+        slotsDiv.innerHTML = `<p>Carregando horários...</p>`;
 
-                const slots = data.slots;
+        try {
+            const resp = await fetch(`/horarios/?date=${date}`);
+            const data = await resp.json();
 
-                if (slots.length === 0) {
-                    timesContainer.innerHTML = "<p>Nenhum horário disponível nesta data.</p>";
-                    continueBtn.disabled = true;
-                    return;
-                }
+            if (!data.slots) {
+                slotsDiv.innerHTML = `<p>Nenhum horário disponível.</p>`;
+                return;
+            }
 
-                let html = `<div class='times-grid'>`;
+            slotsDiv.innerHTML = "";
+            timeSelector.classList.remove("hidden");
 
-                slots.forEach(time => {
-                    html += `
-                        <button type="button" class="time-btn" data-time="${time}">
-                            ${time}
-                        </button>
-                    `;
+            data.slots.forEach(time => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.classList.add("slot-btn");
+                btn.textContent = time;
+
+                btn.addEventListener("click", () => {
+                    // marcar horário escolhido
+                    document.querySelectorAll(".slot-btn").forEach(b => b.classList.remove("selected"));
+                    btn.classList.add("selected");
+
+                    finalTime.value = time;
+                    confirmBtn.disabled = false;
                 });
 
-                html += `</div>`;
-                timesContainer.innerHTML = html;
-
-                document.querySelectorAll(".time-btn").forEach(btn => {
-                    btn.addEventListener("click", () => {
-
-                        document.querySelectorAll(".time-btn")
-                            .forEach(b => b.classList.remove("selected"));
-
-                        btn.classList.add("selected");
-
-                        selectedTimeInput.value = btn.dataset.time;
-                        continueBtn.disabled = false;
-                    });
-                });
-
-                continueBtn.disabled = true;
+                slotsDiv.appendChild(btn);
             });
+
+        } catch (err) {
+            slotsDiv.innerHTML = `<p>Erro ao carregar horários.</p>`;
+            console.error(err);
+        }
     });
+
 });
 </script>
 

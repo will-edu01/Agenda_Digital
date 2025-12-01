@@ -1,0 +1,77 @@
+.select-root {
+    max-width: 900px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 14px;
+}
+
+.select-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 25px;
+}
+
+.select-summary {
+    background: #ffe6ec;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+.service-list {
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+.service-list li {
+    margin-bottom: 6px;
+}
+
+.summary-totals p {
+    font-size: 15px;
+    margin-top: 5px;
+}
+
+.date-box {
+    margin-bottom: 20px;
+}
+
+#time-selector.hidden {
+    display: none;
+}
+
+.slots-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.slot-btn {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #777;
+    background: #fff;
+    cursor: pointer;
+}
+
+.slot-btn.selected {
+    background: #f7bfc7;
+    border-color: #d97a90;
+}
+
+.confirm-btn {
+    width: 100%;
+    padding: 12px;
+    background: #ffedf3;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.confirm-btn:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+}
