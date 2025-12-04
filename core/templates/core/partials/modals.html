@@ -1,6 +1,5 @@
 {# templates/core/partials/modals.html #}
 
-<!-- MODAL: SELECT DATETIME -->
 <div id="modal-select-datetime" class="modal-overlay" aria-hidden="true">
   <div class="modal-box" role="dialog" aria-modal="true">
     <button type="button" class="modal-close" data-action="close-modal">✕</button>
@@ -8,7 +7,7 @@
 
     <div class="modal-field">
       <label for="modal-date">Data</label>
-      <input id="modal-date" type="date" class="date-field" aria-label="Data do agendamento">
+      <input id="modal-date" type="date" class="date-field" min="{{ today }}" aria-label="Data do agendamento">
     </div>
 
     <div class="modal-times-wrapper">
@@ -24,7 +23,6 @@
   </div>
 </div>
 
-<!-- MODAL: SUMMARY -->
 <div id="modal-summary" class="modal-overlay" aria-hidden="true">
   <div class="modal-box" role="dialog" aria-modal="true">
     <button type="button" class="modal-close" data-action="close-modal">✕</button>
@@ -48,7 +46,6 @@
   </div>
 </div>
 
-<!-- MODAL: SUCCESS -->
 <div id="modal-success" class="modal-overlay" aria-hidden="true">
   <div class="modal-box">
     <div class="modal-success" style="text-align:center;">
@@ -63,7 +60,6 @@
   </div>
 </div>
 
-<!-- MODAL: LOGIN REQUIRED -->
 <div id="modal-login-required" class="modal-overlay" aria-hidden="true">
   <div class="modal-box" role="dialog" aria-modal="true">
     
@@ -88,10 +84,21 @@
 </div>
 
 <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+    const dateInput = document.getElementById("modal-date");
+
+    if (dateInput) {
+        const today = new Date().toISOString().split("T")[0];
+        dateInput.min = today;
+    }
+});
+
+
 function openLoginRequiredModal(){
   const m = document.getElementById("modal-login-required");
   if (!m) return;
-  m.style.display = "flex";
+  m.style.display = "show";
   m.setAttribute("aria-hidden","false");
   document.body.classList.add("modal-open");
 }
@@ -99,8 +106,9 @@ function openLoginRequiredModal(){
 function closeLoginRequiredModal(){
   const m = document.getElementById("modal-login-required");
   if (!m) return;
-  m.style.display = "none";
+  m.style.display = "show";
   m.setAttribute("aria-hidden","true");
   document.body.classList.remove("modal-open");
 }
+
 </script>

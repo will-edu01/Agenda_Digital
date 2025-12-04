@@ -18,29 +18,30 @@
 
     <div class="user-area">
       <div id="user-trigger" class="user-trigger" aria-haspopup="true" aria-expanded="false">
-        <span class="user-label">
 
+        <span class="user-label">
           {% if request.user.is_authenticated %}
             {{ request.user.name|default:request.user.email }}
           {% else %}
             Usuário
           {% endif %}
-
         </span>
+        
         <img src="{% static 'img/user-placeholder.png' %}" class="user-avatar" alt="Usuário">
       </div>
 
       <div id="user-dropdown" class="user-dropdown" role="menu" aria-hidden="true">
         <a class="item" href="#">👤 Perfil</a>
-        <a class="item" href="#">📅 Minha Agenda</a>
+        <a class="item" href="{% url 'my_appointments' %}">📅 Minha Agenda</a>
+        
         {% if request.user.is_authenticated %}
           <a class="item" href="{% url 'logout' %}">↩️ Sair</a>
         {% else %}
           <a class="item" href="{% url 'login' %}">🔐 Entrar</a>
         {% endif %}
       </div>
-
     </div>
+
   </div>
 </header>
 {% endblock %}
@@ -62,7 +63,6 @@
   </section>
 
   <section class="about-section" aria-label="Sobre">
-
     <div class="about-title-box">
       <span class="bar"></span>
       <h2 class="about-title">Sobre Nossa Profissional</h2>
@@ -114,14 +114,15 @@
 
     <form id="services-form">
       {% csrf_token %}
+
       <div class="services-grid" role="list">
-          {% for s in services %}
-          <label class="service-card" role="listitem">
-            <div class="service-name">{{ s.name }}</div>
-            <div class="service-meta">R$ {{ s.price }} | {{ s.duration_minutes }} min</div>
-            <input class="service-checkbox" type="checkbox" name="services" value="{{ s.id }}" aria-label="Selecionar {{ s.name }}">
-          </label>
-          {% endfor %}
+        {% for s in services %}
+         <label class="service-card" role="listitem">
+          <div class="service-name">{{ s.name }}</div>
+          <div class="service-meta">R$ {{ s.price }} | {{ s.duration_minutes }} min</div>
+          <input class="service-checkbox" type="checkbox" name="services" value="{{ s.id }}" aria-label="Selecionar {{ s.name }}">
+        </label>
+        {% endfor %}
       </div>
 
       <div class="confirm-box">
@@ -132,8 +133,8 @@
         <button id="continue-btn" class="confirm-btn" type="button" disabled>Continuar</button>
       </div>
     </form>
-
     </div>
+    
   </section>
 
   {% include 'core/partials/modals.html' %}
@@ -148,26 +149,22 @@
 </main>
 
 <script>
-(function(){
-  // helper safe-get
+document.addEventListener("DOMContentLoaded", function() {
   const $ = id => document.getElementById(id);
   const q = sel => document.querySelector(sel);
   const qa = sel => Array.from(document.querySelectorAll(sel));
 
-  // get csrftoken from cookie
   function getCookie(name){
     const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
     return m ? m.pop() : '';
   }
   const csrftoken = getCookie('csrftoken');
 
-  // elements
   const checkboxes = qa('.service-checkbox');
   const totalDurationEl = $('total-duration');
   const totalPriceEl = $('total-price');
   const continueBtn = $('continue-btn');
 
-  // modals
   const modalSelect = $('modal-select-datetime');
   const modalTimes = $('modal-times');
   const modalDate = $('modal-date');
@@ -185,7 +182,6 @@
   const modalSuccess = $('modal-success');
   const successClose = $('success-close');
 
-  // parse helpers
   function parsePrice(txt){
     if (!txt) return 0;
     return parseFloat(txt.replace('R$','').replace(/\s/g,'').replace(',','.')) || 0;
@@ -196,7 +192,6 @@
     return parseInt(n) || 0;
   }
 
-  // update summary totals
   function updateSummary(){
     let minutes = 0, price = 0;
     qa('.service-checkbox').forEach(cb=>{
@@ -214,7 +209,6 @@
     if (continueBtn) continueBtn.disabled = (minutes === 0);
   }
 
-  // open / close helpers (centralized)
   function openModal(modal){
     if (!modal) return;
     modal.classList.add('show');
@@ -225,7 +219,6 @@
     if (!modal) return;
     modal.classList.remove('show');
     modal.setAttribute('aria-hidden','true');
-    // remove modal-open if none visible
     if (!document.querySelector('.modal-overlay.show')) document.body.classList.remove('modal-open');
   }
 
@@ -239,11 +232,9 @@
     closeModal(m);
   };
 
-  // attach change listeners to checkboxes
   qa('.service-checkbox').forEach(cb => cb.addEventListener('change', updateSummary));
   updateSummary();
 
-  // open select datetime modal when clicking continue
   if (continueBtn) {
     continueBtn.addEventListener('click', function(){
       if (continueBtn.disabled) return;
@@ -260,22 +251,16 @@
     });
   }
 
-  // close buttons (any modal: button with data-action="close-modal" or .modal-close)
   document.addEventListener('click', function(e){
-    // close icon
     if (e.target.closest('[data-action="close-modal"]') || e.target.classList.contains('modal-close')) {
       const modal = e.target.closest('.modal-overlay');
       if (modal) closeModal(modal);
     }
-    // click outside modal-box closes modal
     if (e.target.classList && e.target.classList.contains('modal-overlay')) {
       closeModal(e.target);
     }
   });
 
-  // USER dropdown is still handled by base.html script; nothing further here
-
-  // when date changes, fetch available times
   if (modalDate && modalTimes && modalSelectNext) {
     modalDate.addEventListener('change', async function(){
       const date = this.value;
@@ -300,7 +285,6 @@
           return;
         }
 
-        // render horizontal row with buttons
         modalTimes.innerHTML = '';
         slots.forEach(t => {
           const b = document.createElement('button');
@@ -323,7 +307,6 @@
     });
   }
 
-  // when user clicks "Selecionar horário e confirmar" -> call confirm_api to prepare summary
   if (modalSelectNext) {
     modalSelectNext.addEventListener('click', async function(){
       const date = modalSelectNext.dataset.date;
@@ -332,7 +315,6 @@
       if (!selected.length) { showToast('Selecione pelo menos um serviço', 'error'); return; }
       const ids = selected.map(cb => cb.value);
 
-      // build formdata
       const fd = new FormData();
       ids.forEach(id => fd.append('services[]', id));
       fd.append('selected_date', date);
@@ -351,7 +333,6 @@
           return;
         }
 
-        // fill summary modal
         summaryServices.innerHTML = '';
         (data.services || []).forEach(s => {
           const li = document.createElement('li');
@@ -363,7 +344,6 @@
         summaryDate.textContent = data.selected_date;
         summaryHour.textContent = data.selected_time;
 
-        // close times modal and open summary
         closeModal(modalSelect);
         openModal(modalSummary);
 
@@ -374,7 +354,6 @@
     });
   }
 
-  // summary back
   if (summaryBack) {
     summaryBack.addEventListener('click', function(){
       closeModal(modalSummary);
@@ -382,7 +361,6 @@
     });
   }
 
-  // summary confirm -> save_appointment_api
   if (summaryConfirm) {
     summaryConfirm.addEventListener('click', async function(){
       const selected = qa('input[name="services"]:checked');
@@ -415,7 +393,6 @@
     });
   }
 
-  // success close
   if (successClose) {
     successClose.addEventListener('click', function(){
       closeModal(modalSuccess);

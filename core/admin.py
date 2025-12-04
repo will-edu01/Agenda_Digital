@@ -21,5 +21,6 @@ class SpecialDayAdmin(admin.ModelAdmin):
 
 @admin.register(Appointment)
 class AppointmentAdmin(admin.ModelAdmin):
-    list_display = ("user", "date", "start_time", "end_time")
-    list_filter = ("date",)
+    list_display = ("user", "date", "start_time", "end_time", "total_price", "status")
+    list_filter = ("date", "status")
+    search_fields = ("user__email", "user__name")

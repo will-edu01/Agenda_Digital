@@ -1,6 +1,7 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Service, Appointment
 from .utils.schedule import get_available_slots
@@ -8,67 +9,27 @@ from .utils.schedule import get_available_slots
 
 
 def home(request):
+    today = date.today().isoformat()
     services = Service.objects.all().order_by('name')
-    return render(request, "core/home.html", {"services": services})
+    return render(request, "core/home.html", {
+        "services": services,
+        "today": date.today().isoformat()
+    })
 
 
 def get_available_times(request):
     date_str = request.GET.get("date")
     duration = int(request.GET.get("duration", 0))
+
     date = datetime.strptime(date_str, "%Y-%m-%d").date()
+
+    if date < datetime.today().date():
+        return JsonResponse({"slots": []})
+
     slots = get_available_slots(date, duration)
     slots_str = [s.strftime("%H:%M") for s in slots]
+
     return JsonResponse({"slots": slots_str})
-
-
-def select_datetime_view(request):
-    if request.method != "POST":
-        return redirect("home")
-
-    service_ids = request.POST.getlist("services")
-    if not service_ids:
-        services_raw = request.POST.get("services")
-        if services_raw:
-            import re
-            service_ids = re.split(r"[\s,]+", services_raw.strip())
-            service_ids = [s for s in service_ids if s]
-
-    if not service_ids:
-        return redirect("home")
-
-    try:
-        ids_int = [int(x) for x in service_ids]
-    except Exception:
-        ids_int = []
-        for s in service_ids:
-            try:
-                ids_int.append(int(s))
-            except Exception:
-                continue
-
-    if not ids_int:
-        return redirect("home")
-
-    services_qs = Service.objects.filter(id__in=ids_int)
-
-    if not services_qs.exists():
-        return redirect("home")
-
-    total_minutes = sum((s.duration_minutes or 0) for s in services_qs)
-    total_price = sum((s.price or 0) for s in services_qs)
-    if total_minutes == 0:
-        total_minutes = 1
-
-    selected_services = [str(s.id) for s in services_qs]
-
-    context = {
-        "services": services_qs,
-        "total_minutes": total_minutes,
-        "total_price": total_price,
-        "selected_services": selected_services,
-    }
-
-    return render(request, "core/select_datetime.html", context)
 
 
 @require_POST
@@ -107,6 +68,9 @@ def confirm_api(request):
     )
     if conflicts.exists():
         return JsonResponse({"ok": False, "error": "Horário indisponível."}, status=409)
+
+    if date_obj < date.today():
+        return JsonResponse({"ok": False, "error": "Não é possível agendar em datas passadas."})
 
     services_json = [{"id": s.id, "name": s.name, "duration": s.duration_minutes, "price": float(s.price)} for s in services]
 
@@ -151,6 +115,9 @@ def save_appointment_api(request):
     if conflicts.exists():
         return JsonResponse({"ok": False, "error": "Horário já reservado."}, status=409)
 
+    if start_dt.date() < date.today():
+        return JsonResponse({"ok": False, "error": "Não é possível agendar em datas passadas."})
+
     ap = Appointment.objects.create(
         user=request.user,
         date=start_dt.date(),
@@ -162,3 +129,28 @@ def save_appointment_api(request):
     ap.services.set(services)
 
     return JsonResponse({"ok": True, "appointment_id": ap.id})
+
+
+@login_required
+def my_appointments_view(request):
+    user = request.user
+
+    appointments = Appointment.objects.filter(user=user).order_by("date", "start_time")
+
+    upcoming = []
+    past = []
+
+    now = datetime.now()
+
+    for ap in appointments:
+        ap_datetime = datetime.combine(ap.date, ap.start_time)
+        ap.services_list = ap.services.all()
+        if ap_datetime >= now:
+            upcoming.append(ap)
+        else:
+            past.append(ap)
+
+    return render(request, "core/my_appointments.html", {
+        "upcoming": upcoming,
+        "past": past
+    })

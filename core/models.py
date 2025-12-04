@@ -50,6 +50,11 @@ class SpecialDay(models.Model):
         return f"{self.date} — {self.start_time} às {self.end_time}"
     
 class Appointment(models.Model):
+    status = models.CharField(
+    max_length=20,
+    choices=[("scheduled", "Agendado"), ("canceled", "Cancelado")],
+    default="scheduled"
+    )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     services = models.ManyToManyField(Service)
     date = models.DateField()

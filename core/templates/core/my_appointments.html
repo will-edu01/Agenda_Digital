@@ -1,0 +1,98 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/my_appointments.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="agenda-root">
+
+    <h1 class="agenda-title">Minha Agenda</h1>
+
+    <!-- ===========================
+         PRÓXIMOS AGENDAMENTOS
+    ============================= -->
+    <section class="agenda-section">
+        <h2 class="agenda-subtitle">Próximos Agendamentos</h2>
+
+        {% if upcoming %}
+            <div class="appointments-list">
+                {% for ap in upcoming %}
+                  <div class="appointment-card">
+
+                      <div class="appointment-date-box">
+                          <span class="date">{{ ap.date|date:"d/m/Y" }}</span>
+                          <span class="time">{{ ap.start_time|time:"H:i" }} — {{ ap.end_time|time:"H:i" }}</span>
+                      </div>
+
+                      <div class="services-box">
+                          <strong>Serviços:</strong>
+                          <ul>
+                              {% for s in ap.services_list %}
+                                <li>{{ s.name }} — {{ s.duration_minutes }} min — R$ {{ s.price }}</li>
+                              {% endfor %}
+                          </ul>
+                      </div>
+
+                      <div class="meta-box">
+                          <p><strong>Duração total:</strong> {{ ap.total_minutes }} min</p>
+                          <p><strong>Valor total:</strong> R$ {{ ap.total_price }}</p>
+                      </div>
+
+                      <p class="status-line">
+                        <strong>Status:</strong>
+                        {% if ap.status == "scheduled" %}
+                            <span class="status-scheduled">Agendado</span>
+                        {% elif ap.status == "canceled" %}
+                            <span class="status-canceled">Cancelado</span>
+                        {% endif %}
+                      </p>
+                  </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-msg">Você não possui agendamentos futuros.</p>
+        {% endif %}
+    </section>
+
+    <!-- ===========================
+         AGENDAMENTOS PASSADOS
+    ============================= -->
+    <section class="agenda-section">
+        <h2 class="agenda-subtitle">Agendamentos Passados</h2>
+
+        {% if past %}
+            <div class="appointments-list">
+                {% for ap in past %}
+                  <div class="appointment-card past-card">
+
+                      <div class="appointment-date-box">
+                          <span class="date">{{ ap.date|date:"d/m/Y" }}</span>
+                          <span class="time">{{ ap.start_time|time:"H:i" }} — {{ ap.end_time|time:"H:i" }}</span>
+                      </div>
+
+                      <div class="services-box">
+                          <strong>Serviços:</strong>
+                          <ul>
+                              {% for s in ap.services_list %}
+                                <li>{{ s.name }} — {{ s.duration_minutes }} min — R$ {{ s.price }}</li>
+                              {% endfor %}
+                          </ul>
+                      </div>
+
+                      <div class="meta-box">
+                          <p><strong>Duração total:</strong> {{ ap.total_minutes }} min</p>
+                          <p><strong>Valor total:</strong> R$ {{ ap.total_price }}</p>
+                      </div>
+
+                  </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-msg">Nenhum agendamento antigo encontrado.</p>
+        {% endif %}
+    </section>
+
+</main>
+{% endblock %}
