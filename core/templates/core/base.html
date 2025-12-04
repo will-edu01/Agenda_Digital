@@ -7,6 +7,8 @@
   <title>Espaço Ana Valente</title>
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="{% static 'js/modals.js' %}" defer></script>
+  <script src="{% static 'js/home.js' %}"></script>
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -54,7 +56,7 @@
   }
   </script>
 
-  <!-- Helper menu user safe (keeps behavior on pages without menu) -->
+  <!-- Helper menu user safe (keeps behavior on pages without menu) 
   <script>
   document.addEventListener("DOMContentLoaded", function(){
     const trigger = document.getElementById("user-trigger");
@@ -70,6 +72,7 @@
       }
     });
   });
+  -->
   </script>
 
   {% comment %}

@@ -1,159 +1,21 @@
-{% extends "core/base.html" %}
-{% load static %}
-
-{% block extra_head %}
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
-{% endblock %}
-
-{% block show_header %}
-<header class="topbar">
-  <div class="topbar-inner">
-
-
-    <div class="logo-area">
-      <span class="logo-main">Espaço</span>
-      <span class="logo-sub">Ana Valente</span>
-    </div>
-
-
-    <div class="user-area">
-      <div id="user-trigger" class="user-trigger" aria-haspopup="true" aria-expanded="false">
-
-        <span class="user-label">
-          {% if request.user.is_authenticated %}
-            {{ request.user.name|default:request.user.email }}
-          {% else %}
-            Usuário
-          {% endif %}
-        </span>
-        
-        <img src="{% static 'img/user-placeholder.png' %}" class="user-avatar" alt="Usuário">
-      </div>
-
-      <div id="user-dropdown" class="user-dropdown" role="menu" aria-hidden="true">
-        <a class="item" href="#">👤 Perfil</a>
-        <a class="item" href="{% url 'my_appointments' %}">📅 Minha Agenda</a>
-        
-        {% if request.user.is_authenticated %}
-          <a class="item" href="{% url 'logout' %}">↩️ Sair</a>
-        {% else %}
-          <a class="item" href="{% url 'login' %}">🔐 Entrar</a>
-        {% endif %}
-      </div>
-    </div>
-
-  </div>
-</header>
-{% endblock %}
-
-{% block content %}
-
-<script>
-    window.userIsAuthenticated = ( "{{ request.user.is_authenticated }}" === "True" );
-</script>
-
-<main class = "home-root">
-
-  <section class="intro-box" aria-label="Introdução">
-    <div class="intro-text">
-        Em nosso espaço a beleza encontra seu lugar, em um <br>
-        ambiente acolhedor que realça o que há de mais belo <br>
-        em cada pessoa.
-    </div>
-  </section>
-
-  <section class="about-section" aria-label="Sobre">
-    <div class="about-title-box">
-      <span class="bar"></span>
-      <h2 class="about-title">Sobre Nossa Profissional</h2>
-    </div>
-
-    <div class="about-content">
-
-      <div class="about-text">
-        <p>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy
-          text ever since the 1500s, when an unknown printer took a galley
-          of type and scrambled it to make a type specimen book.
-        </p>
-
-        <p>
-          It has survived not only five centuries, but also the leap into
-          electronic typesetting, remaining essentially unchanged. It was
-          popularised in the 1960s with the release of Letraset sheets
-          containing Lorem Ipsum passages, and more recently with desktop
-          publishing software like Aldus PageMaker including versions of
-          Lorem Ipsum.
-        </p>
-
-        <div class="social-links">
-          <a href="https://instagram.com" target="_blank" rel="noopener">📸 Instagram</a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener">💼 LinkedIn</a>
-        </div>
-      </div>
-
-      <div class="about-photo">
-        <img src="{% static 'img/profile.png' %}" alt="Profissional">
-      </div>
-
-    </div>
-  </section>
-
-  <section id="agendamento" class="agendamento-section" aria-label="Agendamento">
-
-    <h2 class="ag-title">Agendamento</h2>
-    
-    <div class="about-section">
-    <div class="servicos-header">
-        <span class="bar"></span>
-        <h3 class="serv-title">Serviços</h3>
-    </div>
-    
-    <p class="serv-sub">Escolha um ou mais serviços — depois selecione data e horário.</p>
-
-    <form id="services-form">
-      {% csrf_token %}
-
-      <div class="services-grid" role="list">
-        {% for s in services %}
-         <label class="service-card" role="listitem">
-          <div class="service-name">{{ s.name }}</div>
-          <div class="service-meta">R$ {{ s.price }} | {{ s.duration_minutes }} min</div>
-          <input class="service-checkbox" type="checkbox" name="services" value="{{ s.id }}" aria-label="Selecionar {{ s.name }}">
-        </label>
-        {% endfor %}
-      </div>
-
-      <div class="confirm-box">
-        <div style="margin-bottom:12px;">
-          Tempo total: <strong id="total-duration">0</strong> min — Valor: R$ <strong id="total-price">0.00</strong>
-        </div>
-
-        <button id="continue-btn" class="confirm-btn" type="button" disabled>Continuar</button>
-      </div>
-    </form>
-    </div>
-    
-  </section>
-
-  {% include 'core/partials/modals.html' %}
-
-  <footer class="main-footer" role="contentinfo">
-      <div class="footer-info">
-          Equipe <br>
-          E-mail | example@gmail.com <br>
-          Whatsapp | 12345678910
-      </div>
-  </footer>
-</main>
-
-<!--
-<script>
 document.addEventListener("DOMContentLoaded", function() {
   const $ = id => document.getElementById(id);
   const q = sel => document.querySelector(sel);
   const qa = sel => Array.from(document.querySelectorAll(sel));
+
+  const trigger = document.getElementById("user-trigger");
+  const dropdown = document.getElementById("user-dropdown");
+  if (trigger && dropdown) {
+      trigger.addEventListener("click", function(e){
+        e.stopPropagation();
+        dropdown.classList.toggle("show");
+      });
+      document.addEventListener("click", function(e){
+        if (!trigger.contains(e.target) && !dropdown.contains(e.target)){
+          dropdown.classList.remove("show");
+        }
+      });
+  }
 
   function getCookie(name){
     const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
@@ -210,29 +72,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (continueBtn) continueBtn.disabled = (minutes === 0);
   }
 
-  function openModal(modal){
-    if (!modal) return;
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden','false');
-    document.body.classList.add('modal-open');
-  }
-  function closeModal(modal){
-    if (!modal) return;
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden','true');
-    if (!document.querySelector('.modal-overlay.show')) document.body.classList.remove('modal-open');
-  }
-
-  window.openLoginRequiredModal = function() {
-    const m = document.getElementById("modal-login-required");
-    openModal(m);
-  };
-
-  window.closeLoginRequiredModal = function() {
-    const m = document.getElementById("modal-login-required");
-    closeModal(m);
-  };
-
   qa('.service-checkbox').forEach(cb => cb.addEventListener('change', updateSummary));
   updateSummary();
 
@@ -252,16 +91,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  document.addEventListener('click', function(e){
-    if (e.target.closest('[data-action="close-modal"]') || e.target.classList.contains('modal-close')) {
-      const modal = e.target.closest('.modal-overlay');
-      if (modal) closeModal(modal);
-    }
-    if (e.target.classList && e.target.classList.contains('modal-overlay')) {
-      closeModal(e.target);
-    }
-  });
-
   if (modalDate && modalTimes && modalSelectNext) {
     modalDate.addEventListener('change', async function(){
       const date = this.value;
@@ -274,7 +103,8 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       const duration = parseInt((totalDurationEl && totalDurationEl.textContent) || '0', 10) || 0;
-      const url = "{% url 'available_times' %}?date=" + encodeURIComponent(date) + "&duration=" + encodeURIComponent(duration);
+
+      const url = "/horarios/?date=" + encodeURIComponent(date) + "&duration=" + encodeURIComponent(duration);
 
       try {
         const res = await fetch(url, { credentials: 'same-origin' });
@@ -322,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function() {
       fd.append('selected_time', time);
 
       try {
-        const res = await fetch("{% url 'confirm_api' %}", {
+        const res = await fetch("/api/confirm/", {
           method: 'POST',
           body: fd,
           headers: { 'X-CSRFToken': csrftoken },
@@ -374,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function() {
       fd.append('selected_time', summaryHour.textContent);
 
       try {
-        const res = await fetch("{% url 'save_appointment_api' %}", {
+        const res = await fetch("/api/save/", {
           method: 'POST',
           body: fd,
           headers: { 'X-CSRFToken': csrftoken },
@@ -400,9 +230,4 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-})();
-</script>
-
-{% endblock %}
-
--->
+});
