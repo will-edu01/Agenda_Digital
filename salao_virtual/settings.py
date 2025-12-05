@@ -13,6 +13,9 @@ DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
+RENDER_EXTERNAL_HOSTNAME = os.getenv("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -56,7 +59,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'salao_virtual.wsgi.application'
 
 # Database
-import os
 
 if os.getenv("RENDER"):
     DATABASES = {
