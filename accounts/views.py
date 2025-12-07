@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib import messages
-from .forms import LoginForm, RegisterForm
-from accounts.models import User
+from .forms import LoginForm
 
 
 def login_view(request):
@@ -29,32 +28,6 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, 'accounts/login.html', {'form': form})
-
-
-
-def register_view(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data["name"]
-            email = form.cleaned_data["email"]
-            phone = form.cleaned_data["phone"]
-            password = form.cleaned_data["password"]
-
-            user = User.objects.create_user(
-                email=email,
-                password=password,
-                name=name,
-                phone=phone
-            )
-
-            messages.success(request, "Cadastro realizado com sucesso! Faça login para continuar.")
-            return redirect("login")
-    else:
-        form = RegisterForm()
-
-    return render(request, "accounts/register.html", {"form": form})
-
 
 
 def logout_view(request):

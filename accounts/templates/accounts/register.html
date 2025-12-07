@@ -12,7 +12,6 @@
 
     <div class="register-container">
 
-        <!-- PARTE ESQUERDA - FORMULÁRIO -->
         <div class="form-section register-left">
             <div class="form-box">
                 <h2 class="login-title">Cadastro</h2>
@@ -26,19 +25,14 @@
                         </div>
                     {% endif %}
 
-                    <!-- NOME -->
                     <input type="text" name="name" placeholder="Nome completo" class="input-field" required value="{{ form.name.value|default_if_none:'' }}">
 
-                    <!-- EMAIL -->
                     <input type="email" name="email" placeholder="E-mail" class="input-field" required value="{{ form.email.value|default_if_none:'' }}">
 
-                    <!-- SENHA -->
                     <input type="password" name="password" placeholder="Senha" class="input-field" required>
 
-                    <!-- CONFIRMAR SENHA -->
                     <input type="password" name="confirm_password" placeholder="Confirmar senha" class="input-field" required>
 
-                    <!-- TELEFONE -->
                     <input type="text" name="phone" placeholder="WhatsApp" class="input-field" required value="{{ form.phone.value|default_if_none:'' }}">
 
                     <button type="submit" class="login-button">Cadastrar</button>
@@ -50,7 +44,6 @@
             </div>
         </div>
 
-        <!-- PARTE DIREITA - IMAGEM -->
         <div class="image-section register-right">
             <img src="{% static 'img/salao.jpeg' %}" class="register-image">
         </div>

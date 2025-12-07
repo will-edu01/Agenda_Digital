@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .models import Service, Appointment
 from .utils.schedule import get_available_slots
-#from .utils.send_email import send_appointment_confirmation
+from .utils.send_email import send_appointment_confirmation
 
 
 
@@ -129,13 +129,13 @@ def save_appointment_api(request):
     )
     ap.services.set(services)
 
-    """send_appointment_confirmation(
+    send_appointment_confirmation(
     request.user,
     services,
     selected_date,
     selected_time,
     total_price
-    )"""
+    )
 
     return JsonResponse({"ok": True, "appointment_id": ap.id})
 

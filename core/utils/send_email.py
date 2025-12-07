@@ -1,4 +1,4 @@
-"""from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 def send_appointment_confirmation(user, services, date, time, total_price):
@@ -18,4 +18,4 @@ def send_appointment_confirmation(user, services, date, time, total_price):
     msg = EmailMultiAlternatives(subject, "", from_email, to)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
-"""
+    
