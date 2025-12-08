@@ -46,6 +46,7 @@
   .toast.info { background: #0ca6c0; }
   </style>
   <div id="toast" class="toast" aria-live="polite"></div>
+
   <script>
   function showToast(text, type="info") {
     const t = document.getElementById("toast");
@@ -56,28 +57,6 @@
   }
   </script>
 
-  <!-- Helper menu user safe (keeps behavior on pages without menu) 
-  <script>
-  document.addEventListener("DOMContentLoaded", function(){
-    const trigger = document.getElementById("user-trigger");
-    const dropdown = document.getElementById("user-dropdown");
-    if (!trigger || !dropdown) return;
-    trigger.addEventListener("click", function(e){
-      e.stopPropagation();
-      dropdown.classList.toggle("show");
-    });
-    document.addEventListener("click", function(e){
-      if (!trigger.contains(e.target) && !dropdown.contains(e.target)){
-        dropdown.classList.remove("show");
-      }
-    });
-  });
-  -->
-  </script>
-
-  {% comment %}
-    Nota: scripts específicos da página (home) são colocados dentro de home.html
-  {% endcomment %}
-
+{% block extra_scripts %}{% endblock %}
 </body>
 </html>

@@ -478,3 +478,49 @@ body {
     pointer-events: none;
 }
 
+/* ===============================
+   ESTILO DO INPUT DE CÓDIGO
+   =============================== */
+
+.verification-wrapper {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.verification-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.code-input-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.code-input {
+    width: 48px;
+    height: 55px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 12px;
+    border: 2px solid #e4d2ff;
+    outline: none;
+    transition: 0.2s ease-in-out;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.08);
+}
+
+.code-input:focus {
+    border-color: #b57aff;
+    box-shadow: 0px 0px 8px rgba(181, 122, 255, 0.4);
+}
+
+.code-input::placeholder {
+    color: #bbb;
+}
+

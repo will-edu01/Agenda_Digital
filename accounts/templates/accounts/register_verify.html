@@ -1,0 +1,70 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="register-container">
+    <div class="register-box">
+        <h2 class="register-title">Verificação de E-mail</h2>
+        <p class="register-subtitle">
+            Enviamos um código para:<br>
+            <strong>{{ email }}</strong>
+        </p>
+
+        <form method="POST" class="register-form">
+            {% csrf_token %}
+
+            <div class="verification-wrapper">
+
+                <label for="code" class="verification-label">Código de verificação</label>
+
+                <div class="code-input-wrapper">
+                    <input type="text" maxlength="1" class="code-input" />
+                    <input type="text" maxlength="1" class="code-input" />
+                    <input type="text" maxlength="1" class="code-input" />
+                    <input type="text" maxlength="1" class="code-input" />
+                    <input type="text" maxlength="1" class="code-input" />
+                    <input type="text" maxlength="1" class="code-input" />
+                </div>
+
+                <input type="hidden" name="code" id="full_code">
+
+            </div>
+
+            <button type="submit" class="register-button">Confirmar Código</button>
+
+            <p class="register-info">
+                Não recebeu o código?<br>
+                <button type="button" id="resendButton" class="register-link">
+                    Reenviar código
+                </button>
+            </p>
+            
+            <p id="resendMessage" class="register-info" style="display:none; margin-top:8px;"></p>
+        </form>
+    </div>
+
+</div>
+
+<script src="{% static 'js/verify_code.js' %}"></script>
+<script src="{% static 'js/resend_code.js' %}"></script>
+
+{% include "accounts/partials/register_success.html" %}
+{% endblock %}
+
+{% block extra_scripts %}
+{% if verified %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('modal-register-success');
+      if (modal) {
+        modal.setAttribute('aria-hidden', 'false');
+        modal.classList.add('active');
+      }
+
+      setTimeout(() => {
+        window.location.href = "{% url 'login' %}";
+      }, 5000);
+    });
+</script>
+{% endif %}
+{% endblock %}

@@ -65,3 +65,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+
+function openSuccessModal() {
+    document.getElementById("successModal").style.display = "flex";
+}
+
+function closeSuccessModal() {
+    document.getElementById("successModal").style.display = "none";
+}

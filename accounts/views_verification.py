@@ -1,14 +1,16 @@
 import random
+from datetime import timedelta
+from django.utils import timezone
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.utils import timezone
-from datetime import timedelta
 from django.core.mail import send_mail
 from django.conf import settings
 
+from django.http import JsonResponse
 from .models_verification import VerificationCode
-from accounts.models import User
 from .forms import RegisterForm
+from accounts.models import User
+
 
 
 def register_step_one(request):
@@ -42,7 +44,7 @@ def register_step_one(request):
             )
 
             # Redireciona para etapa 2
-            return redirect("register_verify")
+            return redirect("verify_email")
     else:
         form = RegisterForm()
 
@@ -58,6 +60,7 @@ def register_verify_code(request):
 
     if request.method == "POST":
         user_code = request.POST.get("code")
+        print("CÓDIGO RECEBIDO:", user_code)
 
         try:
             entry = VerificationCode.objects.filter(email=email).latest("created_at")
@@ -71,22 +74,49 @@ def register_verify_code(request):
             return redirect("register")
 
         if entry.code == user_code:
-            # Cria o usuário
             data = request.session["register_data"]
             User.objects.create_user(
                 email=data["email"],
                 password=data["password"],
                 name=data["name"],
-                phone=data["phone"]
+                phone=data["phone"],
             )
+            try:
+                entry.mark_used()
+            except Exception:
+                entry.is_used = True
+                entry.save(update_fields=['is_used'])
 
-            # Limpa sessão
             del request.session["register_data"]
 
-            messages.success(request, "Conta criada com sucesso! Faça login.")
-            return redirect("login")
+            return render(request, "accounts/register_verify.html", {
+                "email": email,
+                "verified": True
+            })
 
         else:
             messages.error(request, "Código incorreto.")
 
     return render(request, "accounts/register_verify.html", {"email": email})
+
+
+def resend_verification_code(request):
+    if "register_data" not in request.session:
+        return JsonResponse({"ok": False, "error": "Sessão expirada."}, status=400)
+
+    email = request.session["register_data"]["email"]
+
+    # Gera novo código
+    code = f"{random.randint(100000, 999999)}"
+    
+    VerificationCode.objects.create(email=email, code=code)
+
+    # Envia email
+    send_mail(
+        "Seu novo código de verificação",
+        f"Seu novo código é: {code}",
+        settings.EMAIL_HOST_USER,
+        [email],
+    )
+
+    return JsonResponse({"ok": True})

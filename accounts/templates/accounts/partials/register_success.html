@@ -1,0 +1,20 @@
+<div id="modal-register-success" class="modal-success" aria-hidden="true" style="display: none;">
+
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-success-title">
+
+        <span class="close-modal" onclick="closeSuccessModal()" aria-label="Fechar">&times;</span>
+
+        <h2 class="modal-title">Conta Verificada!</h2>
+
+        <p class="modal-text">
+            Seu e-mail foi confirmado com sucesso.<br>
+            Agora você já pode fazer login.
+        </p>
+
+        <div class="success-icon">✓</div>
+
+        <a href="{% url 'login' %}" class="register-button" style="text-align:center;">
+            Fazer Login
+        </a>
+    </div>
+</div>

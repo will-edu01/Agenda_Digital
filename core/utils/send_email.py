@@ -1,13 +1,15 @@
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.conf import settings
+
 
 def send_appointment_confirmation(user, services, date, time, total_price):
 
     subject = "🌸 Seu agendamento foi confirmado!"
-    from_email = "SEU_EMAIL_AQUI"
+    from_email = settings.EMAIL_HOST_USER
     to = [user.email]
 
-    html_content = render_to_string("emails/appointment_confirmation.html", {
+    html_content = render_to_string("core/emails/appointment_confirmation.html", {
         "user_name": user.name or user.email,
         "services": services,
         "date": date,
