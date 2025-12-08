@@ -50,8 +50,26 @@ body, html {
 }
 
 /* USER MENU */
-.user-area {
+.user-menu-wrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 25px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    transition: 0.2s;
+}
+
+.user-info:hover {
+    background: #ffd6e3;
 }
 
 .user-trigger {
@@ -71,11 +89,13 @@ body, html {
 }
 
 .user-avatar {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
+    width: 42px;
+    height: 42px;
     object-fit: cover;
+    border-radius: 50%;
 }
+
+/* DROPDOWN MENU */
 
 .user-dropdown {
     position: absolute;
@@ -113,6 +133,8 @@ body, html {
 .user-dropdown .item:hover {
     background: #fff4f7;
 }
+
+
 
 /* =========================================================
    INTRO TEXT

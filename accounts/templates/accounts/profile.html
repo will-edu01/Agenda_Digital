@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+
+    <div class="profile-card">
+        <h2 class="profile-title">Meu Perfil</h2>
+
+        <div class="profile-info">
+            <p><strong>Nome:</strong> <span id="userName">{{ user.name }}</span></p>
+            <p><strong>E-mail:</strong> {{ user.email }}</p>
+            <p><strong>Telefone:</strong> <span id="userPhone">{{ user.phone }}</span></p>
+        </div>
+
+        <div class="profile-actions">
+            <button class="profile-button" id="openEditProfile">Editar Perfil</button>
+
+            <a href="{% url 'password_change' %}" class="profile-button">
+                Alterar Senha
+            </a>
+
+            <a href="{% url 'my_appointments' %}" class="profile-button">
+                Meus Agendamentos
+            </a>
+
+            <a href="{% url 'logout' %}" class="logout-button">
+                Sair
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal -->
+<div id="modal-edit-profile" class="modal-overlay" aria-hidden="true" style="display:none;">
+    <div class="modal-box" role="dialog" aria-modal="true">
+        <button class="modal-close" id="closeEditProfile" aria-label="Fechar">&times;</button>
+        <h3 class="modal-title">Editar Perfil</h3>
+
+        <form id="editProfileForm" class="modal-form">
+            {% csrf_token %}
+
+            <label for="name">Nome</label>
+            <input type="text" name="name" id="name" value="{{ user.name }}" required>
+
+            <label for="phone">Telefone</label>
+            <input type="text" name="phone" id="phone" value="{{ user.phone }}" required>
+
+            <div class="modal-actions">
+                <button type="submit" class="modal-save">Salvar</button>
+                <button type="button" id="closeEditProfile" class="modal-cancel">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'js/edit_profile.js' %}"></script>
+{% endblock %}

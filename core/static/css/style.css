@@ -437,9 +437,10 @@ body {
 }
 
 /* Dropdown (gaveta) */
+
 .user-dropdown {
     position: absolute;
-    right: 0;
+    right: 12px;
     top: 60px;
     width: 180px;
     background: white;
@@ -451,6 +452,7 @@ body {
     pointer-events: none;
     transition: 0.25s ease;
     z-index: 50;
+    min-width: 200px;
 }
 
 .user-dropdown.show {
@@ -458,6 +460,8 @@ body {
     transform: translateY(0);
     pointer-events: auto;
 }
+
+.dropdown-item + .dropdown-item { border-top: 1px solid #ffeff6; }
 
 .dropdown-item {
     display: block;
@@ -478,49 +482,139 @@ body {
     pointer-events: none;
 }
 
-/* ===============================
-   ESTILO DO INPUT DE CÓDIGO
-   =============================== */
 
-.verification-wrapper {
-    margin-top: 20px;
+
+/* ============================
+     VERIFICAÇÃO DE E-MAIL
+   ============================ */
+
+.verify-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.verify-box {
+    background: #fff;
+    padding: 30px;
+    border-radius: 18px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     text-align: center;
 }
 
-.verification-label {
-    font-size: 16px;
-    font-weight: bold;
+.verify-title {
+    font-size: 26px;
+    font-weight: 600;
     color: #333;
-    display: block;
     margin-bottom: 12px;
 }
 
-.code-input-wrapper {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 20px;
+.verify-sub {
+    margin-bottom: 25px;
+    color: #555;
 }
 
-.code-input {
-    width: 48px;
-    height: 55px;
+.verify-button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 30px;
+    border: none;
+    background: #ffd3dc;
+    color: #333;
+    font-size: 17px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.verify-button:hover {
+    background: #f8bfc5;
+}
+
+.verify-resend {
+    margin-top: 18px;
+    font-size: 15px;
+    color: #666;
+}
+
+
+
+/* ============================
+   ESTILO DA PÁGINA MEU PERFIL
+   ============================ */
+
+.profile-container {
+    max-width: 520px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+.profile-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     text-align: center;
-    font-size: 22px;
-    font-weight: bold;
-    border-radius: 12px;
-    border: 2px solid #e4d2ff;
-    outline: none;
-    transition: 0.2s ease-in-out;
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.08);
 }
 
-.code-input:focus {
-    border-color: #b57aff;
-    box-shadow: 0px 0px 8px rgba(181, 122, 255, 0.4);
+.profile-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333;
 }
 
-.code-input::placeholder {
-    color: #bbb;
+.profile-info {
+    text-align: left;
+    margin-bottom: 28px;
 }
 
+.profile-info p {
+    font-size: 17px;
+    margin-bottom: 12px;
+    color: #444;
+}
+
+.profile-info strong {
+    color: #333;
+}
+
+.profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.profile-button {
+    padding: 12px;
+    border-radius: 30px;
+    border: none;
+    background: #ffd3dc;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .25s;
+    text-align: center;
+}
+
+.profile-button:hover {
+    background: #f8bfc5;
+}
+
+.logout-button {
+    padding: 12px;
+    border-radius: 30px;
+    background: #ff8bb9;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .25s;
+    text-align: center;
+}
+
+.logout-button:hover {
+    background: #ff76ad;
+}

@@ -2,10 +2,10 @@
 {% load static %}
 
 {% block content %}
-<div class="register-container">
-    <div class="register-box">
-        <h2 class="register-title">Verificação de E-mail</h2>
-        <p class="register-subtitle">
+<div class="verify-container">
+    <div class="verify-box">
+        <h2 class="verify-title">Verificação de E-mail</h2>
+        <p class="verify-sub">
             Enviamos um código para:<br>
             <strong>{{ email }}</strong>
         </p>
@@ -30,9 +30,9 @@
 
             </div>
 
-            <button type="submit" class="register-button">Confirmar Código</button>
+            <button type="submit" class="verify-button">Confirmar Código</button>
 
-            <p class="register-info">
+            <p class="verify-resend">
                 Não recebeu o código?<br>
                 <button type="button" id="resendButton" class="register-link">
                     Reenviar código
