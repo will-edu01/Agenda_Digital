@@ -1,21 +1,22 @@
 /* =========================================================
-   RESET
+    Reset Local 
 ========================================================= */
-* {
+
+.home-root * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body, html {
-    font-family: "Poppins", sans-serif;
+body.home-body {
     background: #ffe3e8;
-    color: #303030;
 }
 
+
 /* =========================================================
-   TOP BAR / HEADER
+    TopBar
 ========================================================= */
+
 .topbar {
     background: #f7bfc7;
     padding: 12px 0;
@@ -26,13 +27,11 @@ body, html {
     max-width: 1250px;
     margin: auto;
     padding: 0 20px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* LOGO */
 .logo-area {
     display: flex;
     flex-direction: column;
@@ -49,104 +48,17 @@ body, html {
     font-weight: 600;
 }
 
-/* USER MENU */
-.user-menu-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 25px;
-}
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 20px;
-    transition: 0.2s;
-}
-
-.user-info:hover {
-    background: #ffd6e3;
-}
-
-.user-trigger {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-
-    padding: 8px 14px;
-    background: #ffdce1;
-    border-radius: 20px;
-    transition: 0.2s;
-}
-
-.user-trigger:hover {
-    background: #ffcbd2;
-}
-
-.user-avatar {
-    width: 42px;
-    height: 42px;
-    object-fit: cover;
-    border-radius: 50%;
-}
-
-/* DROPDOWN MENU */
-
-.user-dropdown {
-    position: absolute;
-    top: 55px;
-    right: 0;
-
-    background: white;
-    border-radius: 12px;
-    width: 190px;
-
-    padding-top: 8px;
-    overflow: hidden;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-
-    opacity: 0;
-    transform: translateY(-8px);
-    pointer-events: none;
-    transition: opacity .2s ease, transform .2s ease;
-}
-
-.user-dropdown.show {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-}
-
-.user-dropdown .item {
-    display: block;
-    padding: 12px 14px;
-    color: #333;
-    text-decoration: none;
-    font-size: 15px;
-}
-
-.user-dropdown .item:hover {
-    background: #fff4f7;
-}
-
-
 
 /* =========================================================
-   INTRO TEXT
+   Introdução
 ========================================================= */
+
 .intro-box {
     max-width: 1250px;
     margin: 35px auto;
     padding: 35px 30px;
-
     background: #fff9f3;
     border-left: 6px solid #f8bfc7;
-
     border-radius: 8px;
 }
 
@@ -156,14 +68,15 @@ body, html {
     line-height: 1.6;
 }
 
+
 /* =========================================================
-   SOBRE A PROFISSIONAL
+   Sobre a Profissional
 ========================================================= */
+
 .about-section {
     max-width: 1250px;
     margin: 40px auto;
     padding: 35px 30px;
-
     background: #f8c5ce;
     border-radius: 8px;
 }
@@ -175,7 +88,7 @@ body, html {
     gap: 12px;
 }
 
-.about-title-box .bar {
+.about-title-box .about-bar {
     width: 40px;
     height: 8px;
     background: #ffdee6;
@@ -213,9 +126,7 @@ body, html {
     transition: 0.2s;
 }
 
-.social-links a:hover {
-    opacity: 0.7;
-}
+.social-links a:hover { opacity: 0.7; }
 
 .about-photo {
     width: 290px;
@@ -229,9 +140,11 @@ body, html {
     object-fit: cover;
 }
 
+
 /* =========================================================
-   AGENDAMENTO
+   Agendamento de Serviços
 ========================================================= */
+
 .agendamento-section {
     max-width: 1250px;
     margin: 40px auto;
@@ -243,6 +156,14 @@ body, html {
     font-size: 26px;
     margin-bottom: 25px;
     font-weight: 600;
+}
+
+.services-section {
+    max-width: 1250px;
+    margin: 40px auto;
+    padding: 35px 30px;
+    background: #f8c5ce;
+    border-radius: 8px;
 }
 
 .servicos-header {
@@ -273,9 +194,6 @@ body, html {
     margin-bottom: 35px;
 }
 
-/* =======================
-   CARDS DE SERVIÇO
-======================= */
 .services-grid {
     display: flex;
     justify-content: center;
@@ -303,14 +221,6 @@ body, html {
     box-shadow: 0 10px 25px rgba(0,0,0,0.12);
 }
 
-.service-img {
-    width: 100%;
-    height: 120px;
-    border-radius: 10px;
-    object-fit: cover;
-    margin-bottom: 12px;
-}
-
 .service-name {
     font-weight: 600;
     margin-bottom: 6px;
@@ -327,9 +237,11 @@ body, html {
     transform: scale(1.3);
 }
 
+
 /* =========================================================
-   BOTÃO CONFIRMAR
+   Botão de Confirmar Serviços
 ========================================================= */
+
 .confirm-box {
     text-align: center;
 }
@@ -337,14 +249,11 @@ body, html {
 .confirm-btn {
     background: #ffffff;
     padding: 10px 25px;
-
-    border-radius: 6px;
-    border: 1px solid #aaa;
-
+    border-radius: 20px;
+    border: 1px solid #ff8294;
     cursor: pointer;
     font-weight: 500;
     font-size: 15px;
-
     transition: 0.2s;
 }
 
@@ -357,9 +266,11 @@ body, html {
     background: #ffe3eb;
 }
 
+
 /* =========================================================
-   FOOTER
+   Footer
 ========================================================= */
+
 .main-footer {
     margin-top: 50px;
     background: #fff;
@@ -374,73 +285,16 @@ body, html {
 }
 
 
-/* ===========================
-   ESTILIZAÇÃO DOS MODAIS
-   =========================== */
+/* =========================================================
+   Modais Usados na Página Home
+   (somente ajustes — estrutura está no style.css)
+========================================================= */
 
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.55);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    backdrop-filter: blur(3px);
-    animation: fadeIn .25s ease;
-}
-
-/* Caixa branca dos modais */
-.modal-box {
-    background: #fff;
-    width: 92%;
-    max-width: 420px;
-    padding: 24px;
-    border-radius: 14px;
-    animation: popupSlide .25s ease;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
-    position: relative;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-title {
-    margin-top: 0;
-    font-size: 22px;
-    font-weight: 600;
-    text-align: center;
-}
-
-/* Botão fechar */
-.modal-close {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-    border: none;
-    background: transparent;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-/* Campo de data */
-.date-field {
-    width: 100%;
-    padding: 10px;
-    font-size: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
-
-/* Título de horários */
 .modal-times-wrapper h4 {
     margin-bottom: 10px;
     font-size: 18px;
 }
 
-/* Grade de horários */
 .modal-times-grid {
     display: flex;
     flex-direction: row;
@@ -451,15 +305,12 @@ body, html {
     scroll-behavior: smooth;
 }
 
-.modal-times-grid::-webkit-scrollbar {
-    height: 6px;
-}
+.modal-times-grid::-webkit-scrollbar { height: 6px; }
 .modal-times-grid::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 4px;
 }
 
-/* Cada botão de horário */
 .time-btn {
     padding: 10px 14px;
     white-space: nowrap;
@@ -470,92 +321,27 @@ body, html {
     transition: .2s ease;
 }
 
-.time-btn:hover {
-    background: #eee;
-}
-
+.time-btn:hover { background: #eee; }
 .time-btn.selected {
-    background: #0ca678;
+    background: #ff8294;
     color: #fff;
-    border-color: #0ca678;
+    border-color: #ff8294;
 }
 
-/* Botão confirmar dentro do modal */
 #modal-choose-time {
+    background: #ffffff;
     width: 100%;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 10px 25px;
+    border-radius: 20px;
+    border: 1px solid #aaa;
+    cursor: pointer;
+    font-weight: 500;
     font-size: 16px;
-    margin-top: 10px;
+    transition: 0.2s;
 }
 
-#modal-choose-time:disabled {
-    opacity: 0.5;
-}
+#modal-choose-time:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* Modal de sucesso */
-#modal-success .modal-box {
-    max-width: 360px;
-    text-align: center;
-}
-
-.modal-success h3 {
-    margin-top: 12px;
-    font-size: 22px;
-    color: #0ca678;
-}
-
-.success-text {
-    margin: 8px 0 18px;
-    color: #333;
-}
-
-/* Animações */
-@keyframes popupSlide {
-    from { transform: translateY(18px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* Classe que ativa o modal */
-.show {
-    display: flex !important;
-}
-
-
-/* ===========================
-   MODAL DE RESUMO
-   =========================== */
-
-#modal-summary .modal-box {
-    max-width: 420px;
-}
-
-.summary-content p {
-    margin: 6px 0;
-    font-size: 15px;
-}
-
-.summary-content ul {
-    margin: 8px 0 12px;
-    padding-left: 18px;
-}
-
-.summary-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 18px;
-}
-
-.summary-actions .confirm-btn {
-    width: 48%;
-    padding: 12px;
-}
-
-body.modal-open {
-    overflow: hidden;
+#modal-choose-time:not(:disabled):hover {
+    background: #ffe3eb;
 }

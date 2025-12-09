@@ -73,3 +73,11 @@ function openSuccessModal() {
 function closeSuccessModal() {
     document.getElementById("successModal").style.display = "none";
 }
+
+function showToast(text, type="info") {
+      const t = document.getElementById("toast");
+      t.className = "toast " + type;
+      t.textContent = text;
+      t.classList.add("show");
+      setTimeout(()=> t.classList.remove("show"), 3500);
+}

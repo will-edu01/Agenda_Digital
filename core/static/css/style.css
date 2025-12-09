@@ -1,6 +1,7 @@
-/* ---------- LOGIN PAGE STYLE ---------- */
+/* =========================================================
+   Estilo Global — usado em todas as páginas
+========================================================= */
 
-/* --- LAYOUT PRINCIPAL --- */
 body {
     margin: 0;
     padding: 0;
@@ -9,18 +10,55 @@ body {
     overflow-x: hidden;
 }
 
-.login-container {
+
+/* =========================================================
+   Footer
+========================================================= */
+
+.footer-main {
+    text-align:center;
+    padding:20px 10px;
+    color:#777;
+}
+
+
+/* =========================================================
+   Toast
+========================================================= */
+
+.toast {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    padding: 12px 16px;
+    background: #333;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: all .32s ease;
+    z-index: 99999;
+}
+
+.toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+.toast.info { background: #0ca6c0; }
+
+
+/* =========================================================
+ Páginas Login & Registro (isolado, sem interferir no site)
+========================================================= */
+
+.login-container,
+.register-container {
     display: flex;
     width: 100%;
     height: 100vh;
 }
 
-.register-container {
-    display: flex;
-    height: 100vh;
-}
-
-/* Lado esquerdo - formulário */
 .form-section.register-left {
     width: 50%;
     background-color: #ffd3dc;
@@ -29,13 +67,11 @@ body {
     align-items: center;
 }
 
-/* Lado direito - imagem */
 .image-section.register-right {
     width: 50%;
     overflow: hidden;
 }
 
-/* Garantir que a imagem ocupe todo o lado direito */
 .register-image {
     width: 100%;
     height: 100%;
@@ -43,7 +79,6 @@ body {
     filter: blur(3px);
 }
 
-/* Caixa do formulário */
 .form-box {
     width: 70%;
     display: flex;
@@ -51,7 +86,6 @@ body {
     justify-content: center;
 }
 
-/* Inputs do cadastro */
 .form-box input {
     width: 100%;
     margin-bottom: 15px;
@@ -61,8 +95,6 @@ body {
     font-size: 16px;
 }
 
-
-/* --- LADO ESQUERDO (IMAGEM COM BLUR) --- */
 .login-image {
     flex: 1;
     background-image: url('../img/salao.jpeg');
@@ -71,10 +103,9 @@ body {
     filter: blur(4px);
 }
 
-/* --- LADO DIREITO (FORMULÁRIO) --- */
 .login-form-wrapper {
     flex: 1;
-    background-color: #f8bfc5; /* rosa suave */
+    background-color: #f8bfc5;
     padding: 50px;
     display: flex;
     flex-direction: column;
@@ -88,7 +119,6 @@ body {
     color: #333;
 }
 
-/* --- CAMPOS DE TEXTO --- */
 .input-group input {
     width: 100%;
     padding: 15px;
@@ -99,7 +129,17 @@ body {
     margin-bottom: 20px;
 }
 
-/* --- CHECKBOX --- */
+.change-password input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+    margin-bottom: 20px;
+    background-color: #ffdbdf;
+}
+
 .remember-me {
     font-size: 14px;
     display: flex;
@@ -114,7 +154,6 @@ body {
     margin-right: 8px;
 }
 
-/* --- BOTÃO --- */
 .login-button {
     width: 100%;
     padding: 15px;
@@ -130,7 +169,6 @@ body {
     background-color: #efb1b8;
 }
 
-/* --- LINKS INFERIORES --- */
 .login-links {
     margin-top: 30px;
     text-align: center;
@@ -142,264 +180,10 @@ body {
     text-decoration: underline;
 }
 
-.input-field::placeholder {
-    color: #aaa;
-}
 
-/* Cadastro: formulário à esquerda e imagem à direita */
-.form-left {
-    order: 1;
-}
-
-.image-right {
-    order: 2;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 12px;
-}
-
-.service-item {
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #eee;
-    background: #fff;
-}
-
-.service-item input[type="checkbox"] {
-    transform: scale(1.1);
-}
-
-.service-meta {
-    margin-left:auto;
-    text-align:right;
-    font-size: 0.9rem;
-}
-
-.summary {
-    margin-top: 20px;
-}
-
-
-#times-container {
-    max-height: 180px;
-    overflow-y: auto;
-    padding-right: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #f0c8dc;
-    background: #fff;
-    border-radius: 10px;
-}
-
-/* Estilo da scrollbar */
-#times-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-#times-container::-webkit-scrollbar-thumb {
-    background: #e59ac8;
-    border-radius: 4px;
-}
-
-#times-container::-webkit-scrollbar-track {
-    background: #f7e9f3;
-}
-
-/* Grid dos horários */
-.times-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
-    gap: 10px;
-}
-
-/* Botões de horário */
-.time-btn {
-    padding: 8px 0;
-    text-align: center;
-    background: #ffe2f1;
-    border: 1px solid #ffc3dd;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.time-btn:hover {
-    background: #f7cade;
-}
-
-.time-btn.selected {
-    background: #e37ab7;
-    color: white;
-    font-weight: bold;
-}
-
-
-/* ====== Layout base para páginas (home / select_datetime / confirm) ====== */
-.page-wrapper {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-/* cabeçalho da seção */
-.section-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 6px 18px #00000012;
-    margin-bottom: 18px;
-}
-
-/* título grande do bloco (reutiliza visual do login) */
-.section-title {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 10px;
-    font-weight: 600;
-    color: #333;
-}
-
-/* texto descritivo menor */
-.section-sub {
-    text-align: center;
-    color: #555;
-    margin-bottom: 30px;
-}
-
-.section-block {
-    margin-bottom: 32px;
-}
-
-.section-block p, .section-block label {
-    color: #444;
-}
-
-.section-block ul {
-    list-style: none;
-    padding: 0;
-}
-
-.section-block ul li {
-    margin-bottom: 6px;
-}
-
-/* grid para conteúdos lado-a-lado (imagem + info) */
-.two-columns {
-    display: grid;
-    grid-template-columns: 1fr 420px;
-    gap: 20px;
-    align-items: start;
-}
-
-/* cartão de serviço (refina o .service-item) */
-.service-item {
-    background: #fff7fb;
-    border: 1px solid #ffe7f2;
-    padding: 12px;
-    border-radius: 10px;
-}
-
-/* resumo lateral (preço/duração) */
-.summary-card {
-    background: linear-gradient(180deg,#fdf1f6,#fffafc);
-    padding: 16px;
-    border-radius: 10px;
-    border: 1px solid #ffdfe9;
-    box-shadow: 0 4px 10px #00000006;
-}
-
-/* botões principais */
-.btn-primary {
-    margin-top: 25px;
-    display: inline-block;
-    padding: 12px 24px;
-    background: #ff8bb9;
-    color: white;
-    border-radius: 25px;
-    border: none;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.25s;
-}
-
-.btn-primary:hover {
-    background: #ff76ad;
-}
-
-.btn-primary:disabled {
-    opacity: 0.5;
-    cursor: default;
-}
-
-.summary-text {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 16px;
-    color: #333;
-}
-
-/* estilo dos inputs (data) */
-.date-field {
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-}
-
-/* pequenas responsividades */
-@media (max-width: 900px) {
-    .two-columns {
-        grid-template-columns: 1fr;
-    }
-    .page-wrapper {
-        padding: 12px;
-        margin: 18px 12px;
-    }
-}
-
-/* --- SUCCESS PAGE --- */
-.success-container {
-    text-align: center;
-    margin-top: 80px;
-}
-
-.success-container h1 {
-    font-size: 32px;
-    margin-bottom: 20px;
-    color: #444;
-}
-
-.success-text {
-    font-size: 18px;
-    margin-bottom: 35px;
-    color: #555;
-}
-
-.success-btn {
-    display: inline-block;
-    padding: 12px 25px;
-    border-radius: 30px;
-    background: #f8bfc5;
-    border: 2px solid #f4a5ad;
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-    transition: 0.3s;
-}
-
-.success-btn:hover {
-    background: #efb1b8;
-}
-
-/* --------------------------
-   MENU DO USUÁRIO (HEADER)
----------------------------*/
+/* =========================================================
+   HEADER (Menu usuário) — usado em TODAS as páginas
+========================================================= */
 
 .user-menu-wrapper {
     position: relative;
@@ -436,13 +220,11 @@ body {
     color: #333;
 }
 
-/* Dropdown (gaveta) */
-
 .user-dropdown {
     position: absolute;
     right: 12px;
     top: 60px;
-    width: 180px;
+    width: 200px;
     background: white;
     border-radius: 12px;
     box-shadow: 0px 4px 14px rgba(0,0,0,0.15);
@@ -452,16 +234,15 @@ body {
     pointer-events: none;
     transition: 0.25s ease;
     z-index: 50;
-    min-width: 200px;
+    display: none;
 }
 
 .user-dropdown.show {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
+    display: block;
 }
-
-.dropdown-item + .dropdown-item { border-top: 1px solid #ffeff6; }
 
 .dropdown-item {
     display: block;
@@ -472,21 +253,18 @@ body {
     transition: 0.2s;
 }
 
+.dropdown-item + .dropdown-item { 
+    border-top: 1px solid #ffeff6;
+}
+
 .dropdown-item:hover {
     background: #ffe6f2;
 }
 
-/* esconde */
-.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
 
-
-
-/* ============================
-     VERIFICAÇÃO DE E-MAIL
-   ============================ */
+/* =========================================================
+    Página de Verificação do E-mail
+========================================================= */
 
 .verify-container {
     display: flex;
@@ -540,10 +318,9 @@ body {
 }
 
 
-
-/* ============================
-   ESTILO DA PÁGINA MEU PERFIL
-   ============================ */
+/* =========================================================
+    Página Meu Perfil
+========================================================= */
 
 .profile-container {
     max-width: 520px;
@@ -566,15 +343,15 @@ body {
     color: #333;
 }
 
-.profile-info {
-    text-align: left;
-    margin-bottom: 28px;
-}
-
 .profile-info p {
     font-size: 17px;
     margin-bottom: 12px;
     color: #444;
+}
+
+.profile-info {
+    text-align: left;
+    margin-bottom: 28px;
 }
 
 .profile-info strong {
@@ -617,4 +394,90 @@ body {
 
 .logout-button:hover {
     background: #ff76ad;
+}
+
+
+/* =========================================================
+   MODALS (globais para qualquer página)
+========================================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.55);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(3px);
+    animation: fadeIn .25s ease;
+}
+
+.modal-overlay.show {
+    display: flex !important;
+    opacity: 1;
+}
+
+.modal-box {
+    background: #fff;
+    width: 92%;
+    max-width: 420px;
+    padding: 24px;
+    border-radius: 14px;
+    animation: popupSlide .25s ease;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.25);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-title {
+    margin-top: 0;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-box input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    margin-bottom: 12px;
+    border-radius: 8px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.modal-save {
+    flex: 1;
+    background: #ff8bb9;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.modal-cancel {
+    flex: 1;
+    background: #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
 }
